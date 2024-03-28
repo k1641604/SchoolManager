@@ -1,6 +1,21 @@
-public class SchoolManager {
-}
+import java.sql.*;
 
+public class SchoolManager {
+    public static void main(String [] args){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/test","root","password");
+
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        
+    }
+
+}
 
 
 
@@ -20,6 +35,7 @@ public class SchoolManager {
 /*        CREATE TABLE IF NOT EXISTS teacher (id INTEGER NOT NULL AUTO_INCREMENT, firstName TEXT, lastName TEXT, PRIMARY KEY(teacher_id));
           DROP TABLE IF EXISTS teacher;
           INSERT INTO teacher(firstName, lastName) VALUES(firstNameValue, LastNameValue);
+
           SELECT firstName, lastName FROM teacher;*/
 
         /*course table*/

@@ -6,29 +6,40 @@ import javax.swing.event.ListSelectionEvent;
 
 public class SchoolManagerFrame extends JFrame{
 
-    JPanel teachersList = new JPanel();
-    JPanel courseList = new JPanel();
-    JPanel sectionList = new JPanel();
-    JPanel studentList = new JPanel();
+    JMenuBar menubar = new JMenuBar();
+    JTable teachersList = new JTable();
+    JTable courseList = new JTable();
+    JTable sectionList = new JTable();
+    JTable enrollmentList = new JTable();
+    JTable studentList = new JTable();
+
+    JButton deleteTables = new JButton();
+
 
     public SchoolManagerFrame(){
         super("School Manager");
         setSize(800, 700);
         setLayout(null);
 
-        teachersList.setBounds();
+        teachersList.setBounds(20, 20, 148, 660);
         add(teachersList);
 
-        courseList.setBounds();
+        courseList.setBounds(178, 20, 148, 660);
         add(courseList);
 
-        sectionList.setBounds();
+        sectionList.setBounds(336, 20, 148, 660);
         add(sectionList);
 
-        studentList.setBounds();
+        enrollmentList.setBounds(494, 20, 148, 660);
+        add(enrollmentList);
+
+        studentList.setBounds(651, 20, 148, 660);
         add(studentList);
+
+        deleteTables.setBounds();
 
         setVisible(true);
     }
+
 
 }
