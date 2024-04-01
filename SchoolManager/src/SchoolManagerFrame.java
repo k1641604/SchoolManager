@@ -21,6 +21,9 @@ public class SchoolManagerFrame extends JFrame{
         setSize(800, 700);
         setLayout(null);
 
+        menubar.setBounds(0,0,800,19);
+        add(menubar);
+
         teachersList.setBounds(20, 20, 148, 660);
         add(teachersList);
 
