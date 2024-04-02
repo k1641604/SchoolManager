@@ -1,18 +1,20 @@
+import java.awt.*;
 import java.sql.*;
 
 public class SchoolManager {
     public static void main(String [] args){
+        SchoolManagerFrame frame = new SchoolManagerFrame();
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/test","root","password");
+                    "jdbc:mysql://localhost:3306/school_manager_p3","root","password");
 
             con.close();
         }
         catch(Exception e){
             System.out.println(e);
         }
-        
+
     }
 
 }
