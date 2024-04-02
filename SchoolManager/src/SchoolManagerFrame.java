@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -48,6 +51,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         aboutApp.setVisible(false);
         JMenu help = new JMenu("Help");
         JMenuItem about = new JMenuItem ("About");
+        about.addActionListener(e ->{clearDisplayAndShowAbout();});
         help.add(about);
 
         menubar.setBounds(0,0,800,19);
@@ -155,5 +159,70 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         courseList.setVisible(false);
         sectionList.setVisible(false);
         aboutApp.setVisible(true);
+    }
+    public void fileSave()
+    {
+        try
+        {
+            File f = new File("Teacher.csv");
+            File f1 = new File("Student.csv");
+            File f2 = new File("Course.csv");
+            File f3 = new File("Selection.csv");
+            if(!f.exists())
+            {
+                f.createNewFile();
+            }
+            if(!f1.exists())
+            {
+                f1.createNewFile();
+            }
+            if(!f2.exists())
+            {
+                f2.createNewFile();
+            }
+            if(!f3.exists())
+            {
+                f3.createNewFile();
+            }
+            FileWriter fileWriter = new FileWriter(f,false);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            /*for(Contact c : Rolodex.n)
+            {
+                printWriter.println(c.toStore());
+            }*/
+            fileWriter.close();
+            printWriter.close();
+
+            fileWriter = new FileWriter(f,false);
+            printWriter = new PrintWriter(fileWriter);
+            /*for(Contact c : Rolodex.n)
+            {
+                printWriter.println(c.toStore());
+            }*/
+            fileWriter.close();
+            printWriter.close();
+
+            fileWriter = new FileWriter(f,false);
+            printWriter = new PrintWriter(fileWriter);
+            /*for(Contact c : Rolodex.n)
+            {
+                printWriter.println(c.toStore());
+            }*/
+            fileWriter.close();
+            printWriter.close();
+
+            fileWriter = new FileWriter(f,false);
+            printWriter = new PrintWriter(fileWriter);
+            /*for(Contact c : Rolodex.n)
+            {
+                printWriter.println(c.toStore());
+            }*/
+            fileWriter.close();
+            printWriter.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
