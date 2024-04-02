@@ -13,6 +13,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     JTable enrollmentList = new JTable();
     JTable studentList = new JTable();
 
+    JTextArea aboutApp = new JTextArea("");
     JButton deleteTables = new JButton();
 
 
@@ -31,13 +32,20 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         file.add(exit);
         JMenu view = new JMenu("View");
         JMenuItem teacher = new JMenuItem ("Teacher");
+        teacher.addActionListener(e ->{showTeacher();});
         JMenuItem student = new JMenuItem ("Student");
+        student.addActionListener(e ->{showStudent();});
         JMenuItem course = new JMenuItem ("Course");
+        course.addActionListener(e ->{showCourse();});
         JMenuItem section = new JMenuItem ("Section");
+        section.addActionListener(e ->{showSection();});
         view.add(teacher);
         view.add(student);
         view.add(course);
         view.add(section);
+        aboutApp.setBounds(0, 20, 800, 660);
+        add(aboutApp);
+        aboutApp.setVisible(false);
         JMenu help = new JMenu("Help");
         JMenuItem about = new JMenuItem ("About");
         help.add(about);
@@ -51,17 +59,23 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         teachersList.setBounds(0, 20, 800, 660);
         add(teachersList);
 
+        studentList.setBounds(0, 20, 800, 660);
+        add(studentList);
+        studentList.setVisible(false);
+
         courseList.setBounds(0, 20, 800, 660);
-        //add(courseList);
+        add(courseList);
+        courseList.setVisible(false);
 
         sectionList.setBounds(0, 20, 800, 660);
-        //add(sectionList);
+        add(sectionList);
+        sectionList.setVisible(false);
 
         enrollmentList.setBounds(0, 20, 800, 660);
-        //add(enrollmentList);
+        add(enrollmentList);
+        enrollmentList.setVisible(false);
 
-        studentList.setBounds(0, 20, 800, 660);
-        //add(studentList);
+
 
         //deleteTables.setBounds();
 
@@ -93,7 +107,6 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     public void windowDeiconified(WindowEvent e) {
 
     }
-
     @Override
     public void windowActivated(WindowEvent e) {
 
@@ -102,5 +115,45 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     @Override
     public void windowDeactivated(WindowEvent e) {
 
+    }
+    public void showTeacher()
+    {
+        teachersList.setVisible(true);
+        studentList.setVisible(false);
+        courseList.setVisible(false);
+        sectionList.setVisible(false);
+        aboutApp.setVisible(false);
+    }
+    public void showStudent()
+    {
+        teachersList.setVisible(false);
+        studentList.setVisible(true);
+        courseList.setVisible(false);
+        sectionList.setVisible(false);
+        aboutApp.setVisible(false);
+    }
+    public void showCourse()
+    {
+        teachersList.setVisible(false);
+        studentList.setVisible(false);
+        courseList.setVisible(true);
+        sectionList.setVisible(false);
+        aboutApp.setVisible(false);
+    }
+    public void showSection()
+    {
+        teachersList.setVisible(false);
+        studentList.setVisible(false);
+        courseList.setVisible(false);
+        sectionList.setVisible(true);
+        aboutApp.setVisible(false);
+    }
+    public void clearDisplayAndShowAbout()
+    {
+        teachersList.setVisible(false);
+        studentList.setVisible(false);
+        courseList.setVisible(false);
+        sectionList.setVisible(false);
+        aboutApp.setVisible(true);
     }
 }
