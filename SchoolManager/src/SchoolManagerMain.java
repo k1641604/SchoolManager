@@ -17,3 +17,15 @@ public class SchoolManagerMain {
     }
 
 }
+
+
+/* proper way to create table for teacher below, see canvas page for more tables to be created
+
+CREATE TABLE IF NOT EXISTS teacher (teacher_id INTEGER Not Null Primary Key AUTO_INCREMENT,
+first_name Text,
+last_name Text
+);
+
+
+
+ */
