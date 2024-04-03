@@ -1,21 +1,22 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-
+import java.util.*;
 public class SchoolManagerFrame extends JFrame implements WindowListener{
 
     JMenuBar menubar = new JMenuBar();
     JTable teachersList = new JTable();
-    JTable courseList = new JTable();
-    JTable sectionList = new JTable();
-    JTable enrollmentList = new JTable();
+    ArrayList<Teachers> teacher = new ArrayList<Teachers>();
     JTable studentList = new JTable();
-
+    ArrayList<Students> student = new ArrayList<Students>();
+    JTable courseList = new JTable();
+    ArrayList<Courses> course = new ArrayList<Courses>();
+    JTable sectionList = new JTable();
+    ArrayList<Sections> section = new ArrayList<Sections>();
+    JTable enrollmentList = new JTable();
+    ArrayList<Enrollment> enrollment = new ArrayList<Enrollment>();
     JTextArea aboutApp = new JTextArea("");
     JButton deleteTables = new JButton();
 
@@ -60,22 +61,22 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         menubar.add(view);
         menubar.add(help);
 
-        teachersList.setBounds(0, 20, 800, 660);
+        teachersList.setBounds(5, 20, 450, 660);
         add(teachersList);
 
-        studentList.setBounds(0, 20, 800, 660);
+        studentList.setBounds(5, 20, 450, 660);
         add(studentList);
         studentList.setVisible(false);
 
-        courseList.setBounds(0, 20, 800, 660);
+        courseList.setBounds(5, 20, 450, 660);
         add(courseList);
         courseList.setVisible(false);
 
-        sectionList.setBounds(0, 20, 800, 660);
+        sectionList.setBounds(5, 20, 450, 660);
         add(sectionList);
         sectionList.setVisible(false);
 
-        enrollmentList.setBounds(0, 20, 800, 660);
+        enrollmentList.setBounds(5, 20, 450, 660);
         add(enrollmentList);
         enrollmentList.setVisible(false);
 
@@ -126,6 +127,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         studentList.setVisible(false);
         courseList.setVisible(false);
         sectionList.setVisible(false);
+        enrollmentList.setVisible(false);
         aboutApp.setVisible(false);
     }
     public void showStudent()
@@ -134,6 +136,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         studentList.setVisible(true);
         courseList.setVisible(false);
         sectionList.setVisible(false);
+        enrollmentList.setVisible(false);
         aboutApp.setVisible(false);
     }
     public void showCourse()
@@ -142,6 +145,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         studentList.setVisible(false);
         courseList.setVisible(true);
         sectionList.setVisible(false);
+        enrollmentList.setVisible(false);
         aboutApp.setVisible(false);
     }
     public void showSection()
@@ -150,6 +154,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         studentList.setVisible(false);
         courseList.setVisible(false);
         sectionList.setVisible(true);
+        enrollmentList.setVisible(false);
         aboutApp.setVisible(false);
     }
     public void clearDisplayAndShowAbout()
@@ -158,6 +163,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         studentList.setVisible(false);
         courseList.setVisible(false);
         sectionList.setVisible(false);
+        enrollmentList.setVisible(false);
         aboutApp.setVisible(true);
     }
     public void fileSave()
@@ -168,6 +174,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             File f1 = new File("Student.csv");
             File f2 = new File("Course.csv");
             File f3 = new File("Selection.csv");
+            File f4 = new File("Enrollment.csv");
             if(!f.exists())
             {
                 f.createNewFile();
@@ -183,6 +190,10 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             if(!f3.exists())
             {
                 f3.createNewFile();
+            }
+            if(!f4.exists())
+            {
+                f4.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(f,false);
             PrintWriter printWriter = new PrintWriter(fileWriter);
