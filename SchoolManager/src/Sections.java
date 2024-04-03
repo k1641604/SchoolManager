@@ -9,6 +9,21 @@ public class Sections implements Comparable{
         this.teacherID = teacherID;
     }
 
+    public int getSectionID() {
+        return sectionID;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public int getTeacherID() {
+        return teacherID;
+    }
+    public String toStore()
+    {
+        return sectionID + "," + courseID + "," + teacherID;
+    }
     @Override
     public int compareTo(Object o) {
         return 0;

@@ -7,6 +7,17 @@ public class Enrollment implements Comparable{
         this.studentID = studentID;
     }
 
+    public int getSectionID() {
+        return sectionID;
+    }
+
+    public int getStudentID() {
+        return studentID;
+    }
+    public String toStore()
+    {
+        return sectionID + "," + studentID ;
+    }
     @Override
     public int compareTo(Object o) {
         return 0;

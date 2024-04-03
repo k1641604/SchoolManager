@@ -9,6 +9,21 @@ public class Courses implements Comparable {
         this.type = type;
     }
 
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getType() {
+        return type;
+    }
+    public String toStore()
+    {
+        return courseID + "," + title + "," + type;
+    }
     @Override
     public int compareTo(Object o) {
         return 0;

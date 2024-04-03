@@ -197,32 +197,40 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             }
             FileWriter fileWriter = new FileWriter(f,false);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            /*for(Contact c : Rolodex.n)
+            for(Teachers c : teacher)
             {
                 printWriter.println(c.toStore());
-            }*/
+            }
             fileWriter.close();
             printWriter.close();
 
-            fileWriter = new FileWriter(f,false);
+            fileWriter = new FileWriter(f1,false);
             printWriter = new PrintWriter(fileWriter);
-            /*for(Contact c : Rolodex.n)
+            for(Students c : student)
             {
                 printWriter.println(c.toStore());
-            }*/
+            }
             fileWriter.close();
             printWriter.close();
 
-            fileWriter = new FileWriter(f,false);
+            fileWriter = new FileWriter(f2,false);
             printWriter = new PrintWriter(fileWriter);
-            /*for(Contact c : Rolodex.n)
+            for(Courses c : course)
             {
                 printWriter.println(c.toStore());
-            }*/
+            }
             fileWriter.close();
             printWriter.close();
 
-            fileWriter = new FileWriter(f,false);
+            fileWriter = new FileWriter(f3,false);
+            printWriter = new PrintWriter(fileWriter);
+            for(Enrollment c : enrollment)
+            {
+                printWriter.println(c.toStore());
+            }
+            fileWriter.close();
+            printWriter.close();
+            fileWriter = new FileWriter(f4,false);
             printWriter = new PrintWriter(fileWriter);
             /*for(Contact c : Rolodex.n)
             {

@@ -9,6 +9,22 @@ public class Students implements Comparable{
         this.lastName = lastName;
     }
 
+    public int getStudentID() {
+        return studentID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    public String toStore()
+    {
+        return studentID + "," + firstName + "," + lastName;
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;
