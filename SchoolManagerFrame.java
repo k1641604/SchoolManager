@@ -16,10 +16,18 @@ public class SchoolManagerFrame extends JFrame{
     JTable teachersList = new JTable();
     JTable courseList = new JTable();
     JTable sectionList = new JTable();
-    JTable enrollmentList = new JTable();
+    JScrollPane sectionsPane = new JScrollPane();
+    JTable enrollmentList;
+    JScrollPane enrollmentPane = new JScrollPane();
     JTable studentList = new JTable();
 
-    JButton deleteTables = new JButton();
+    JButton deleteTable;
+
+    JRadioButton ACA = new JRadioButton("0) Academic");
+    JRadioButton KAP = new JRadioButton("1) KAP");
+    JRadioButton  AP = new JRadioButton("3) AP");
+    ButtonGroup bg = new ButtonGroup();
+
 
 
     public SchoolManagerFrame() {
@@ -37,6 +45,55 @@ public class SchoolManagerFrame extends JFrame{
         FileMenuCreator();
         menubar.add(File);
         setJMenuBar(menubar);
+
+        teachersList.setBounds(20, 20, 300, 500);
+        teachersList.setBorder(oLine);
+        add(teachersList);
+        teachersList.setVisible(false);
+
+        sectionsPane.setBounds(400, 20, 300, 200);
+        sectionsPane.setBorder(oLine);
+        add(sectionsPane);
+        sectionsPane.setVisible(false);
+
+        studentList.setBounds(20, 20, 300, 500);
+        studentList.setBorder(oLine);
+        add(studentList);
+        studentList.setVisible(false);
+
+        enrollmentPane.setBounds(400, 20, 300, 200);
+        enrollmentPane.setBorder(oLine);
+        add(enrollmentPane);
+        enrollmentPane.setVisible(false);
+
+        courseList.setBounds(20, 20, 300, 500);
+        courseList.setBorder(oLine);
+        add(courseList);
+        courseList.setVisible(false);
+
+        sectionList.setBounds(20, 20, 300, 500);
+        sectionList.setBorder(oLine);
+        add(sectionList);
+        sectionList.setVisible(false);
+
+        ACA.setBounds(400, 300, 100, 50);
+        ACA.setBorder(oLine);
+        bg.add(ACA);
+        add(ACA);
+        ACA.setVisible(false);
+
+        KAP.setBounds(400, 350, 75, 50);
+        KAP.setBorder(oLine);
+        bg.add(KAP);
+        add(KAP);
+        KAP.setVisible(false);
+
+        AP.setBounds(400, 400, 75, 50);
+        AP.setBorder(oLine);
+        bg.add(AP);
+        add(AP);
+        AP.setVisible(false);
+
 
         try {
             File f = new File("SchoolManager.txt");
@@ -95,36 +152,98 @@ public class SchoolManagerFrame extends JFrame{
     }
 
     public void teacherTable(){
-        try {
-            File f = new File("TeacherInfo.txt");
+        openTeacher();
+        System.out.println("aaaaaaaaaaaaaaaaaaaa");
+        //setVisible(false);
+        teachersList.setVisible(true);
+        sectionsPane.setVisible(true);
+        /*try {File f = new File("TeacherInfo.txt");
             Scanner fromFile = new Scanner(f);
             String a = null;
-            while(fromFile.hasNextLine()){
-
-                String[] parts = fromFile.nextLine().split(",");
-                if (parts.equals("")){
-                    break;
-                }
-                Teacher t = new Teacher(parts[0],parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
+                if (parts.equals("")){break;}
+                Teacher t = new Teacher( );
                 info.add(t);
-                stuff.setListData(info.toArray());
-            }
-            System.out.println("String is "+ a);
-        }
-        catch (Exception b){
-            b.printStackTrace();
-            System.out.println("Helo");
-        }
+                stuff.setListData(info.toArray());}
+            System.out.println("String is "+ a);}
+        catch (Exception b){b.printStackTrace();
+            System.out.println("Helo");}*/
         String[] columnNames = {"id", "First Name", "Last Name"};
-        teachersList = new JTable(teacherData, columnNames);
-        teachersList.setBounds(300, 500, 20, 20);
-        Border oLine  = BorderFactory.createLineBorder(Color.black);;
-        teachersList.setBorder(oLine);
-        setVisible(true);
+        //teachersList = new JTable(teacherData, columnNames);
     }
-    public void studentTable(){}
-    public void coursesTable(){}
-    public void sectionsTable(){}
+    public void openTeacher(){
+        studentList.setVisible(false);
+        enrollmentPane.setVisible(false);
+        courseList.setVisible(false);
+        ACA.setVisible(false);
+        KAP.setVisible(false);
+        AP.setVisible(false);
+    }
+
+    public void studentTable(){
+        openStudent();
+        System.out.println("bbbbbbbbbbbbbbbbbbbb");
+        //setVisible(false);
+        studentList.setVisible(true);
+        enrollmentPane.setVisible(true);
+                /*try {File f = new File("StudentInfo.txt");
+            Scanner fromFile = new Scanner(f);
+            String a = null;
+            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
+                if (parts.equals("")){break;}
+                Student s = new Student();
+                info.add(s);
+                stuff.setListData(info.toArray());}
+            System.out.println("String is "+ a);}
+        catch (Exception b){b.printStackTrace();
+            System.out.println("Helo");}*/
+        String[] columnNames = {"id", "First Name", "Last Name"};
+        //studentList = new JTable(studentData, columnNames);
+    }
+    public void openStudent(){
+        teachersList.setVisible(false);
+        sectionsPane.setVisible(false);
+        courseList.setVisible(false);
+        ACA.setVisible(false);
+        KAP.setVisible(false);
+        AP.setVisible(false);
+    }
+
+    public void coursesTable(){
+        System.out.println("cccccccccccccccccccc");
+        //setVisible(false);
+        courseList.setVisible(true);
+        ACA.setVisible(true);
+        KAP.setVisible(true);
+        AP.setVisible(true);
+        //enrollmentPane.setVisible(true);
+                /*try {File f = new File("CourseInfo.txt");
+            Scanner fromFile = new Scanner(f);
+            String a = null;
+            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
+                if (parts.equals("")){break;}
+                Course c = new Course();
+                info.add(c);
+                stuff.setListData(info.toArray());}
+            System.out.println("String is "+ a);}
+        catch (Exception b){b.printStackTrace();
+            System.out.println("Helo");}*/
+        String[] columnNames = {"id", "Title", "Type"};
+        //courseList = new JTable(courseData, columnNames);
+    }
+    public void openCourse(){
+
+    }
+
+    public void sectionsTable(){
+        System.out.println("dddddddddddddddddddd");
+        //setVisible(false);
+
+    }
+    public void openSection(){
+
+    }
+
 
     public void helpTable(){}
 
@@ -242,7 +361,7 @@ class Course implements Comparable{
 
     private int courseType;
 
-    
+
 
     @Override
     public int compareTo(Object o) {
