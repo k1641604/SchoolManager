@@ -224,7 +224,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
 
             fileWriter = new FileWriter(f3,false);
             printWriter = new PrintWriter(fileWriter);
-            for(Enrollment c : enrollment)
+            for(Sections c : section)
             {
                 printWriter.println(c.toStore());
             }
@@ -232,10 +232,10 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             printWriter.close();
             fileWriter = new FileWriter(f4,false);
             printWriter = new PrintWriter(fileWriter);
-            /*for(Contact c : Rolodex.n)
+            for(Enrollment c : enrollment)
             {
                 printWriter.println(c.toStore());
-            }*/
+            }
             fileWriter.close();
             printWriter.close();
         }
@@ -244,4 +244,5 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             e.printStackTrace();
         }
     }
+    //public
 }
