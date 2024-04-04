@@ -13,86 +13,138 @@ public class SchoolManagerFrame extends JFrame{
     JMenu View = new JMenu("View");
     JMenu Help = new JMenu("Help");
     JMenu File = new JMenu("File");
-    JTable teachersList = new JTable();
+        JLabel teachers = new JLabel("Teachers");
+        JTable teachersList = new JTable();
+        JTextField teacherFirstName = new JTextField();
+        JTextField teacherLastName = new JTextField();
+    JLabel cListName = new JLabel("Course List");
     JTable courseList = new JTable();
-    JTable sectionList = new JTable();
-    JScrollPane sectionsPane = new JScrollPane();
+    JLabel course = new JLabel("Course Name");
+    JTextField courseName = new JTextField("");
+        JTable sectionList = new JTable();
+
+        JLabel secTab = new JLabel("Sections Taught");
+        JTable sectionsTab = new JTable();
     JTable enrollmentList;
     JScrollPane enrollmentPane = new JScrollPane();
-    JTable studentList = new JTable();
+        JTable studentList = new JTable();
+        JTextField studentFirstName = new JTextField();
+        JTextField studentLastName = new JTextField();
 
     JButton deleteTable;
 
     JRadioButton ACA = new JRadioButton("0) Academic");
     JRadioButton KAP = new JRadioButton("1) KAP");
-    JRadioButton  AP = new JRadioButton("3) AP");
+    JRadioButton  AP = new JRadioButton("2) AP");
     ButtonGroup bg = new ButtonGroup();
-
-
+    JButton addCourse = new JButton("Add course to List");
+    JButton removeCourse = new JButton("Remove Course from List");
+    JButton editCourse = new JButton("Save Changes to Course");
 
     public SchoolManagerFrame() {
-        super("School Manager");
-        setSize(800, 700);
-        setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Border oLine = BorderFactory.createLineBorder(Color.black);
+                super("School Manager");
+                setSize(800, 700);
+                setLayout(null);
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
+                Border oLine = BorderFactory.createLineBorder(Color.black);
 
-        add(menubar);
-        ViewMenuCreator();
-        menubar.add(View);
-        HelpMenuCreator();
-        menubar.add(Help);
-        FileMenuCreator();
-        menubar.add(File);
-        setJMenuBar(menubar);
+                add(menubar);
+                ViewMenuCreator();
+                menubar.add(View);
+                HelpMenuCreator();
+                menubar.add(Help);
+                FileMenuCreator();
+                menubar.add(File);
+                setJMenuBar(menubar);
 
-        teachersList.setBounds(20, 20, 300, 500);
+
+        teachers.setBounds(20, 15, 300, 15);
+        add(teachers);
+        teachers.setVisible(false);
+
+        teachersList.setBounds(20, 30, 300, 500);
         teachersList.setBorder(oLine);
         add(teachersList);
         teachersList.setVisible(false);
 
-        sectionsPane.setBounds(400, 20, 300, 200);
-        sectionsPane.setBorder(oLine);
-        add(sectionsPane);
-        sectionsPane.setVisible(false);
+            secTab.setBounds(400, 15,300, 15 );
+            add(secTab);
+            secTab.setVisible(false);
+
+            sectionsTab.setBounds(400, 30, 300, 200);
+            sectionsTab.setBorder(oLine);
+            add(sectionsTab);
+            sectionsTab.setVisible(false);
+
+            teacherFirstName.setBounds();
+            
 
         studentList.setBounds(20, 20, 300, 500);
         studentList.setBorder(oLine);
         add(studentList);
         studentList.setVisible(false);
 
-        enrollmentPane.setBounds(400, 20, 300, 200);
-        enrollmentPane.setBorder(oLine);
-        add(enrollmentPane);
-        enrollmentPane.setVisible(false);
+            enrollmentPane.setBounds(400, 20, 300, 200);
+            enrollmentPane.setBorder(oLine);
+            add(enrollmentPane);
+            enrollmentPane.setVisible(false);
 
-        courseList.setBounds(20, 20, 300, 500);
+        cListName.setBounds(20, 15, 300, 15);
+        add(cListName);
+        cListName.setVisible(false);
+
+        courseList.setBounds(20, 30, 300, 500);
         courseList.setBorder(oLine);
         add(courseList);
         courseList.setVisible(false);
 
-        sectionList.setBounds(20, 20, 300, 500);
-        sectionList.setBorder(oLine);
-        add(sectionList);
-        sectionList.setVisible(false);
+            course.setBounds(400, 15,300, 15 );
+            add(course);
+            course.setVisible(false);
 
-        ACA.setBounds(400, 300, 100, 50);
-        ACA.setBorder(oLine);
-        bg.add(ACA);
-        add(ACA);
-        ACA.setVisible(false);
+            courseName.setBounds(400, 30, 300, 50);
+            courseName.setBorder(oLine);
+            add(courseName);
+            courseName.setVisible(false);
 
-        KAP.setBounds(400, 350, 75, 50);
-        KAP.setBorder(oLine);
-        bg.add(KAP);
-        add(KAP);
-        KAP.setVisible(false);
+            ACA.setBounds(400, 100, 100, 30);
+            ACA.setBorder(oLine);
+            bg.add(ACA);
+            add(ACA);
+            ACA.setVisible(false);
 
-        AP.setBounds(400, 400, 75, 50);
-        AP.setBorder(oLine);
-        bg.add(AP);
-        add(AP);
-        AP.setVisible(false);
+            KAP.setBounds(400, 130, 75, 30);
+            KAP.setBorder(oLine);
+            bg.add(KAP);
+            add(KAP);
+            KAP.setVisible(false);
+
+            AP.setBounds(400, 160, 75, 30);
+            AP.setBorder(oLine);
+            bg.add(AP);
+            add(AP);
+            AP.setVisible(false);
+
+        addCourse.setBounds(400, 220, 300, 30);
+        add(addCourse);
+        addCourse.addActionListener(e -> {courseAdder();});
+        addCourse.setVisible(false);
+
+        removeCourse.setBounds(400, 280, 300, 30);
+        add(removeCourse);
+        removeCourse.addActionListener(e -> {courseRemover();});
+        removeCourse.setVisible(false);
+
+        editCourse.setBounds(400, 340, 300, 30);
+        add(editCourse);
+        editCourse.addActionListener(e -> {courseEditor();});
+        editCourse.setVisible(false);
+
+            sectionList.setBounds(20, 20, 300, 500);
+            sectionList.setBorder(oLine);
+            add(sectionList);
+            sectionList.setVisible(false);
+
 
 
         try {
@@ -155,8 +207,10 @@ public class SchoolManagerFrame extends JFrame{
         openTeacher();
         System.out.println("aaaaaaaaaaaaaaaaaaaa");
         //setVisible(false);
+        teachers.setVisible(true);
         teachersList.setVisible(true);
-        sectionsPane.setVisible(true);
+        secTab.setVisible(true);
+        sectionsTab.setVisible(true);
         /*try {File f = new File("TeacherInfo.txt");
             Scanner fromFile = new Scanner(f);
             String a = null;
@@ -174,10 +228,16 @@ public class SchoolManagerFrame extends JFrame{
     public void openTeacher(){
         studentList.setVisible(false);
         enrollmentPane.setVisible(false);
+        cListName.setVisible(false);
         courseList.setVisible(false);
+        course.setVisible(false);
+        courseName.setVisible(false);
         ACA.setVisible(false);
         KAP.setVisible(false);
         AP.setVisible(false);
+        addCourse.setVisible(false);
+        removeCourse.setVisible(false);
+        editCourse.setVisible(false);
     }
 
     public void studentTable(){
@@ -202,20 +262,33 @@ public class SchoolManagerFrame extends JFrame{
     }
     public void openStudent(){
         teachersList.setVisible(false);
-        sectionsPane.setVisible(false);
+        sectionsTab.setVisible(false);
+        cListName.setVisible(false);
         courseList.setVisible(false);
+        course.setVisible(false);
+        courseName.setVisible(false);
         ACA.setVisible(false);
         KAP.setVisible(false);
         AP.setVisible(false);
+        addCourse.setVisible(false);
+        removeCourse.setVisible(false);
+        editCourse.setVisible(false);
     }
 
     public void coursesTable(){
+        openCourse();
         System.out.println("cccccccccccccccccccc");
         //setVisible(false);
-        courseList.setVisible(true);
-        ACA.setVisible(true);
-        KAP.setVisible(true);
-        AP.setVisible(true);
+            cListName.setVisible(true);
+            courseList.setVisible(true);
+            course.setVisible(true);
+            courseName.setVisible(true);
+            ACA.setVisible(true);
+            KAP.setVisible(true);
+            AP.setVisible(true);
+            addCourse.setVisible(true);
+            removeCourse.setVisible(true);
+            editCourse.setVisible(true);
         //enrollmentPane.setVisible(true);
                 /*try {File f = new File("CourseInfo.txt");
             Scanner fromFile = new Scanner(f);
@@ -232,8 +305,17 @@ public class SchoolManagerFrame extends JFrame{
         //courseList = new JTable(courseData, columnNames);
     }
     public void openCourse(){
-
+        teachersList.setVisible(false);
+        sectionsTab.setVisible(false);
+        studentList.setVisible(false);
+        enrollmentPane.setVisible(false);
     }
+
+    public void courseAdder(){}
+
+    public void courseRemover(){}
+
+    public void courseEditor(){}
 
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
