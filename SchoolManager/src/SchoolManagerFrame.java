@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.*;
 public class SchoolManagerFrame extends JFrame implements WindowListener{
 
@@ -21,7 +22,7 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     JButton deleteTables = new JButton();
 
 
-    public SchoolManagerFrame(){
+    public SchoolManagerFrame(Connection c){
         super("School Manager");
         setSize(800, 700);
         setLayout(null);
@@ -244,5 +245,73 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             e.printStackTrace();
         }
     }
-    //public
+    public void readFile()
+    {
+        try {
+            File f = new File("Teacher.csv");
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            Scanner from = new Scanner(f);
+            while (from.hasNext()) {
+                String[] parts = from.nextLine().split(",");
+                Teachers c;
+                c = new Teachers(Integer.parseInt(parts[0]), parts[1], parts[2]);
+                teacher.add(c);
+            }
+            from.close();
+            File f1 = new File("Student.csv");
+            if (!f1.exists()) {
+                f1.createNewFile();
+            }
+            from = new Scanner(f1);
+            while (from.hasNext()) {
+                String[] parts = from.nextLine().split(",");
+                Students c;
+                c = new Students(Integer.parseInt(parts[0]), parts[1], parts[2]);
+                student.add(c);
+            }
+            from.close();
+            File f2 = new File("Course.csv");
+            if (!f2.exists()) {
+                f2.createNewFile();
+            }
+            from = new Scanner(f2);
+            while (from.hasNext()) {
+                String[] parts = from.nextLine().split(",");
+                Courses c;
+                c = new Courses(Integer.parseInt(parts[0]), parts[1], Integer.parseInt(parts[2]));
+                course.add(c);
+            }
+            from.close();
+            File f3 = new File("Section.csv");
+            if (!f3.exists()) {
+                f3.createNewFile();
+            }
+            from = new Scanner(f3);
+            while (from.hasNext()) {
+                String[] parts = from.nextLine().split(",");
+                Sections c;
+                c = new Sections(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                section.add(c);
+            }
+            from.close();
+            File f4 = new File("Enrollment.csv");
+            if (!f4.exists()) {
+                f4.createNewFile();
+            }
+            from = new Scanner(f4);
+            while (from.hasNext()) {
+                String[] parts = from.nextLine().split(",");
+                Enrollment c;
+                c = new Enrollment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                enrollment.add(c);
+            }
+            from.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
