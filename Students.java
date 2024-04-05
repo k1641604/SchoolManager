@@ -1,0 +1,32 @@
+public class Students implements Comparable{
+    private int studentID;
+    private String firstName;
+    private String lastName;
+
+    public Students(int studentID, String firstName, String lastName) {
+        this.studentID = studentID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public int getStudentID() {
+        return studentID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    public String toStore()
+    {
+        return studentID + "," + firstName + "," + lastName;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
+}

@@ -13,9 +13,11 @@ public class SchoolManagerFrame extends JFrame{
     JMenu View = new JMenu("View");
     JMenu Help = new JMenu("Help");
     JMenu File = new JMenu("File");
-        JLabel teachers = new JLabel("Teachers");
+        JLabel teachers = new JLabel("Teacher Information");
         JTable teachersList = new JTable();
+        JLabel tFirst = new JLabel("First Name");
         JTextField teacherFirstName = new JTextField();
+        JLabel tLast = new JLabel("Last Name");
         JTextField teacherLastName = new JTextField();
     JLabel cListName = new JLabel("Course List");
     JTable courseList = new JTable();
@@ -27,7 +29,11 @@ public class SchoolManagerFrame extends JFrame{
         JTable sectionsTab = new JTable();
     JTable enrollmentList;
     JScrollPane enrollmentPane = new JScrollPane();
+        JLabel students = new JLabel("Student Information");
+        JLabel schedule = new JLabel("Student Schedule");
         JTable studentList = new JTable();
+        JLabel sFirst = new JLabel("First Name");
+        JLabel sLast = new JLabel("Last Name");
         JTextField studentFirstName = new JTextField();
         JTextField studentLastName = new JTextField();
 
@@ -37,9 +43,20 @@ public class SchoolManagerFrame extends JFrame{
     JRadioButton KAP = new JRadioButton("1) KAP");
     JRadioButton  AP = new JRadioButton("2) AP");
     ButtonGroup bg = new ButtonGroup();
+
+    //should fail if textfield / type are left unfilled (pop-up window)
     JButton addCourse = new JButton("Add course to List");
+
+    //should only appear after course has been selected
     JButton removeCourse = new JButton("Remove Course from List");
     JButton editCourse = new JButton("Save Changes to Course");
+
+    //should fail if first / last name are left unfilled (pop-up window)
+    JButton addStudent = new JButton("Add Student to List");
+
+    //should only appear after student has been selected
+    JButton removeStudent = new JButton("Remove Student from List");
+    JButton editStudent = new JButton("Save Changes to Student's Information");
 
     public SchoolManagerFrame() {
                 super("School Manager");
@@ -76,18 +93,59 @@ public class SchoolManagerFrame extends JFrame{
             add(sectionsTab);
             sectionsTab.setVisible(false);
 
-            teacherFirstName.setBounds();
-            
+            tFirst.setBounds(400, 265,130, 15);
+            add(tFirst);
+            tFirst.setVisible(false);
 
-        studentList.setBounds(20, 20, 300, 500);
+            teacherFirstName.setBounds(400, 280, 130, 30);
+            teacherFirstName.setBorder(oLine);
+            add(teacherFirstName);
+            teacherFirstName.setVisible(false);
+
+            tLast.setBounds(600,265, 130, 15);
+            add(tLast);
+            tLast.setVisible(false);
+
+            teacherLastName.setBounds(600, 280, 130, 30);
+            teacherLastName.setBorder(oLine);
+            add(teacherLastName);
+            teacherLastName.setVisible(false);
+
+        students.setBounds(20, 15, 300, 15);
+        add(students);
+        students.setVisible(false);
+
+        studentList.setBounds(20, 30, 300, 500);
         studentList.setBorder(oLine);
         add(studentList);
         studentList.setVisible(false);
 
-            enrollmentPane.setBounds(400, 20, 300, 200);
+            schedule.setBounds(400, 15, 300, 15);
+            add(schedule);
+            schedule.setVisible(false);
+
+            enrollmentPane.setBounds(400, 30, 300, 200);
             enrollmentPane.setBorder(oLine);
             add(enrollmentPane);
             enrollmentPane.setVisible(false);
+
+            sFirst.setBounds(400, 265,130, 15);
+            add(tFirst);
+            tFirst.setVisible(false);
+
+            studentFirstName.setBounds(400, 280, 130, 30);
+            studentFirstName.setBorder(oLine);
+            add(studentFirstName);
+            studentFirstName.setVisible(false);
+
+            sLast.setBounds(600,265, 130, 15);
+            add(tLast);
+            tLast.setVisible(false);
+
+            studentLastName.setBounds(600, 280, 130, 30);
+            studentLastName.setBorder(oLine);
+            add(studentLastName);
+            studentLastName.setVisible(false);
 
         cListName.setBounds(20, 15, 300, 15);
         add(cListName);
@@ -194,12 +252,16 @@ public class SchoolManagerFrame extends JFrame{
         JMenuItem purge = new JMenuItem("Purge");
         JMenuItem exit = new JMenuItem("Exit");
         File.add(exportData);
+        //should save data to file? (idk)
         exportData.addActionListener(e -> {exportDataDoer();});
         File.add(importData);
+        //pop-up browser allows user to select file to import data from
         importData.addActionListener(e -> {importDataDoer();});
         File.add(purge);
+        //deletes all tables (does not affect the SQL), then calls release()
         purge.addActionListener(e -> {purger();});
         File.add(exit);
+        //automatically closes the program
         exit.addActionListener(e -> {release();});
     }
 
@@ -211,6 +273,10 @@ public class SchoolManagerFrame extends JFrame{
         teachersList.setVisible(true);
         secTab.setVisible(true);
         sectionsTab.setVisible(true);
+        tFirst.setVisible(true);
+        teacherFirstName.setVisible(true);
+        tLast.setVisible(true);
+        teacherLastName.setVisible(true);
         /*try {File f = new File("TeacherInfo.txt");
             Scanner fromFile = new Scanner(f);
             String a = null;
@@ -226,6 +292,14 @@ public class SchoolManagerFrame extends JFrame{
         //teachersList = new JTable(teacherData, columnNames);
     }
     public void openTeacher(){
+        //all JTextFields should be reset if another menu is opened
+        //More things need to be added as more tables, labels, textfields, etc are added to the program
+        tFirst.setVisible(false);
+        tLast.setVisible(false);
+        studentFirstName.setVisible(false);
+        studentLastName.setVisible(false);
+        students.setVisible(false);
+        schedule.setVisible(false);
         studentList.setVisible(false);
         enrollmentPane.setVisible(false);
         cListName.setVisible(false);
@@ -244,8 +318,14 @@ public class SchoolManagerFrame extends JFrame{
         openStudent();
         System.out.println("bbbbbbbbbbbbbbbbbbbb");
         //setVisible(false);
+        students.setVisible(true);
+        schedule.setVisible(true);
         studentList.setVisible(true);
         enrollmentPane.setVisible(true);
+        tFirst.setVisible(true);
+        studentFirstName.setVisible(true);
+        studentLastName.setVisible(true);
+        tLast.setVisible(true);
                 /*try {File f = new File("StudentInfo.txt");
             Scanner fromFile = new Scanner(f);
             String a = null;
@@ -261,6 +341,14 @@ public class SchoolManagerFrame extends JFrame{
         //studentList = new JTable(studentData, columnNames);
     }
     public void openStudent(){
+        //all JTextFields should be reset if another menu is opened
+        //More things need to be added as more tables, labels, textfields, etc are added to the program
+        teachers.setVisible(false);
+        secTab.setVisible(false);
+        tFirst.setVisible(false);
+        teacherFirstName.setVisible(false);
+        tLast.setVisible(false);
+        teacherLastName.setVisible(false);
         teachersList.setVisible(false);
         sectionsTab.setVisible(false);
         cListName.setVisible(false);
@@ -305,6 +393,20 @@ public class SchoolManagerFrame extends JFrame{
         //courseList = new JTable(courseData, columnNames);
     }
     public void openCourse(){
+        //all JTextFields should be reset if another menu is opened
+        //More things need to be added as more tables, labels, textfields, etc are added to the program
+        tFirst.setVisible(false);
+        tLast.setVisible(false);
+        studentFirstName.setVisible(false);
+        studentLastName.setVisible(false);
+        students.setVisible(false);
+        schedule.setVisible(false);
+        teachers.setVisible(false);
+        secTab.setVisible(false);
+        tFirst.setVisible(false);
+        teacherFirstName.setVisible(false);
+        tLast.setVisible(false);
+        teacherLastName.setVisible(false);
         teachersList.setVisible(false);
         sectionsTab.setVisible(false);
         studentList.setVisible(false);
@@ -319,136 +421,22 @@ public class SchoolManagerFrame extends JFrame{
 
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
-        //setVisible(false);
 
     }
     public void openSection(){
-
+        //all JTextFields should be reset if another menu is opened
+        //More things need to be added as more tables, labels, textfields, etc are added to the program
     }
 
 
-    public void helpTable(){}
+    public void helpTable(){
+        //no idea what this does
+    }
 
     public void exportDataDoer(){}
     public void importDataDoer(){}
     public void purger(){}
     public void release(){}
-}
-class Teacher implements Comparable {
-    private int teacherID;
-    private String teacherFirstName;
-    private String teacherLastName;
-    //private Section secInfo;
-
-    public Teacher(int id, String firstName, String lastName){
-        this.teacherID = id;
-        this.teacherFirstName = firstName;
-        this.teacherLastName = lastName;
-    }
-
-    public int getId(){
-        return teacherID;
-    }
-
-    public String getFirstName(){
-        return teacherFirstName;
-    }
-
-    public String getLastName(){
-        return teacherLastName;
-    }
-
-    /*public Section getSecInfo(){
-        return secInfo;
-    }*/
-
-    public void getId(int id){
-        this.teacherID = id;
-    }
-
-    public void getFirstName(String firstName){
-        this.teacherFirstName = firstName;
-    }
-
-    public void getLastname(String lastName){
-        this.teacherLastName = lastName;
-    }
-
-    /*public void getSecInfo(Section secInfo){
-        this.secInfo = secInfo;
-    }*/
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-}
-
-class Student implements Comparable {
-    private int studentID;
-    private String studentFirstName;
-    private String studentLastName;
-
-    //private Course schedule;
-
-    public Student(){
-        this.studentID = studentID;
-        this.studentFirstName = studentFirstName;
-        this.studentLastName = studentLastName;
-        //this.schedule = schedule;
-    }
-
-    public int getId(){
-        return studentID;
-    }
-
-    public String getFirstName(){
-        return studentFirstName;
-    }
-
-    public String getLastName(){
-        return studentLastName;
-    }
-
-    /*public Section getSchedule(){
-        return schedule;
-    }*/
-
-    public void getId(int id){
-        this.studentID = id;
-    }
-
-    public void getFirstName(String firstName){
-        this.studentFirstName = firstName;
-    }
-
-    public void getLastname(String lastName){
-        this.studentLastName = lastName;
-    }
-
-    /*public void getSchedule(Section secInfo){
-        this.schedule = schedule;
-    }*/
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-}
-
-class Course implements Comparable{
-    private int courseID;
-
-    private String courseName;
-
-    private int courseType;
-
-
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 }
 
 
