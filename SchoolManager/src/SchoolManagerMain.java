@@ -7,7 +7,7 @@ public class SchoolManagerMain {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/SchoolManager","root","password");
-            SchoolManagerFrame a = new SchoolManagerFrame(con);
+            new SchoolManagerFrame(con);
             con.close();
         }
         catch(Exception e){

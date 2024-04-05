@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 public class SchoolManagerFrame extends JFrame implements WindowListener{
 
@@ -80,7 +82,11 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         enrollmentList.setBounds(5, 20, 450, 660);
         add(enrollmentList);
         enrollmentList.setVisible(false);
-
+        try {
+            Statement statement = c.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
         //deleteTables.setBounds();
