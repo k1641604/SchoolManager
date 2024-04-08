@@ -23,7 +23,6 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     JTable enrollmentList = new JTable();
     ArrayList<Enrollment> enrollment = new ArrayList<Enrollment>();
     JTextArea aboutApp = new JTextArea("");
-    JButton deleteTables = new JButton();
     Connection con;
     Statement s;
 
@@ -443,6 +442,51 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     public void addToSqlSection(Sections se)
     {
         String state = "INSERT INTO section (course, teacher) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteFromSqlTeacher(int id)
+    {
+        String state = "DELETE FROM teacher WHERE teacher_id=" + id + ";";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteFromSqlStudent(int id)
+    {
+        String state = "DELETE FROM teacher WHERE student_id=" + id + ";";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteFromSqlCourse(int id)
+    {
+        String state = "DELETE FROM teacher WHERE course_id=" + id + ";";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteFromSqlSection(int id)
+    {
+        String state = "DELETE FROM teacher WHERE section_id=" + id + ";";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteFromSqlEnrollment(int id1, int id2)
+    {
+        String state = "DELETE FROM teacher WHERE section_id=" + id1 + " AND student_id=" + id2 + ";";
         try {
             s.execute(state);
         } catch (SQLException e) {

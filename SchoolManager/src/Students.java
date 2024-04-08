@@ -25,6 +25,18 @@ public class Students implements Comparable{
         return studentID + "," + firstName + "," + lastName;
     }
 
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;

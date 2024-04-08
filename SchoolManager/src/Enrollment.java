@@ -18,6 +18,15 @@ public class Enrollment implements Comparable{
     {
         return sectionID + "," + studentID ;
     }
+
+    public void setSectionID(int sectionID) {
+        this.sectionID = sectionID;
+    }
+
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;

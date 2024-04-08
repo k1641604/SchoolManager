@@ -24,6 +24,19 @@ public class Sections implements Comparable{
     {
         return sectionID + "," + courseID + "," + teacherID;
     }
+
+    public void setSectionID(int sectionID) {
+        this.sectionID = sectionID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public void setTeacherID(int teacherID) {
+        this.teacherID = teacherID;
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;

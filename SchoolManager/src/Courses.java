@@ -24,6 +24,19 @@ public class Courses implements Comparable {
     {
         return courseID + "," + title + "," + type;
     }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;
