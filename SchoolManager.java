@@ -3,12 +3,12 @@ import java.sql.*;
 
 public class SchoolManager {
     public static void main(String [] args){
-        SchoolManagerFrame frame = new SchoolManagerFrame();
+
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/school_manager_p3","root","password");
-
+            SchoolManagerFrame frame = new SchoolManagerFrame(con);
             con.close();
         }
         catch(Exception e){
