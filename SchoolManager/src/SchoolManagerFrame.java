@@ -416,18 +416,37 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     public void addToSqlTeacher(Teachers t)
     {
         String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
-
+        try {
+            this.s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void addToSqlStudent(Students s)
+    public void addToSqlStudent(Students st)
     {
-        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + s.getFirstName() +"', '" + s.getLastName() + "');";
+        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + st.getFirstName() +"', '" + st.getLastName() + "');";
+        try {
+            this.s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void addToSqlCourse(Courses c)
     {
         String state = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
+        try {
+            this.s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void addToSqlSection(Sections s)
+    public void addToSqlSection(Sections se)
     {
-        String state = "INSERT INTO section (course, teacher) VALUES (" + s.getCourseID() +", " + s.getTeacherID() + ");";
+        String state = "INSERT INTO section (course, teacher) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
+        try {
+            s.execute(state);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
