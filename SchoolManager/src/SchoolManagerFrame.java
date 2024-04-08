@@ -1,9 +1,11 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -22,12 +24,20 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
     ArrayList<Enrollment> enrollment = new ArrayList<Enrollment>();
     JTextArea aboutApp = new JTextArea("");
     JButton deleteTables = new JButton();
+    Connection con;
+    Statement s;
 
 
     public SchoolManagerFrame(Connection c){
         super("School Manager");
         setSize(800, 700);
         setLayout(null);
+        this.con = c;
+        try {
+            this.s = this.con.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         JMenu file = new JMenu("File");
         JMenuItem exportData = new JMenuItem ("Export Data");
         JMenuItem importData = new JMenuItem ("Import Data");
@@ -319,5 +329,105 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         {
             e.printStackTrace();
         }
+    }
+    public void addToJTableDataStudentAndTeacher(String sqlTable, JTable table)
+    {
+        //referenced code from Knowledge to Share's YouTube video;
+        String state = "select * from " + sqlTable;
+        try {
+            ResultSet rs = this.s.executeQuery(state);
+            while(rs.next())
+            {
+                String id;
+                if(sqlTable.equals("teacher"))
+                {
+                    id = String.valueOf(rs.getInt("teacher_id"));
+                }
+                else
+                {
+                    id = String.valueOf(rs.getInt("student_id"));
+                }
+                String first = rs.getString("first_name");
+                String last = rs.getString("last_name");
+                String[] toAdd = {id, first, last};
+                DefaultTableModel tableMod =  (DefaultTableModel) table.getModel();
+                tableMod.addRow(toAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addToJTableDataCourses()
+    {
+        //referenced code from Knowledge to Share's YouTube video;
+        String state = "select * from courses";
+        try {
+            ResultSet rs = this.s.executeQuery(state);
+            while(rs.next())
+            {
+                String id = String.valueOf(rs.getInt("course_id"));
+                String title = rs.getString("title");
+                String type = String.valueOf(rs.getInt("type"));
+                String[] toAdd = {id, title, type};
+                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
+                tableMod.addRow(toAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addToJTableDataSections()
+    {
+        //referenced code from Knowledge to Share's YouTube video;
+        String state = "select * from sections";
+        try {
+            ResultSet rs = this.s.executeQuery(state);
+            while(rs.next())
+            {
+                String sec = rs.getString("section_id");
+                String cou = String.valueOf(rs.getInt("course_id"));
+                String teach = String.valueOf(rs.getInt("teacher_id"));
+                String[] toAdd = {sec, cou, teach};
+                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
+                tableMod.addRow(toAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addToJTableDataEnrollment()
+    {
+        //referenced code from Knowledge to Share's YouTube video;
+        String state = "select * from enrollment";
+        try {
+            ResultSet rs = this.s.executeQuery(state);
+            while(rs.next())
+            {
+                String sec = String.valueOf(rs.getInt("section_id"));
+                String stu = String.valueOf(rs.getInt("student_id"));
+                String[] toAdd = {sec, stu};
+                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
+                tableMod.addRow(toAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addToSqlTeacher(Teachers t)
+    {
+        String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
+
+    }
+    public void addToSqlStudent(Students s)
+    {
+        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + s.getFirstName() +"', '" + s.getLastName() + "');";
+    }
+    public void addToSqlCourse(Courses c)
+    {
+        String state = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
+    }
+    public void addToSqlSection(Sections s)
+    {
+        String state = "INSERT INTO section (course, teacher) VALUES (" + s.getCourseID() +", " + s.getTeacherID() + ");";
     }
 }
