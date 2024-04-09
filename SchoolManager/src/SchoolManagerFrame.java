@@ -329,27 +329,38 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             e.printStackTrace();
         }
     }
-    public void addToJTableDataStudentAndTeacher(String sqlTable, JTable table)
+    public void addToJTableDataTeachers()
     {
         //referenced code from Knowledge to Share's YouTube video;
-        String state = "select * from " + sqlTable;
+        String state = "select * from teacher where teacher_id>-1";
         try {
             ResultSet rs = this.s.executeQuery(state);
             while(rs.next())
             {
-                String id;
-                if(sqlTable.equals("teacher"))
-                {
-                    id = String.valueOf(rs.getInt("teacher_id"));
-                }
-                else
-                {
-                    id = String.valueOf(rs.getInt("student_id"));
-                }
+                String id = String.valueOf(rs.getInt("teacher_id"));
                 String first = rs.getString("first_name");
                 String last = rs.getString("last_name");
                 String[] toAdd = {id, first, last};
-                DefaultTableModel tableMod =  (DefaultTableModel) table.getModel();
+                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
+                tableMod.addRow(toAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addToJTableDataStudent()
+    {
+        //referenced code from Knowledge to Share's YouTube video;
+        String state = "select * from student";
+        try {
+            ResultSet rs = this.s.executeQuery(state);
+            while(rs.next())
+            {
+                String id = String.valueOf(rs.getInt("student_id"));
+                String first = rs.getString("first_name");
+                String last = rs.getString("last_name");
+                String[] toAdd = {id, first, last};
+                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
             }
         } catch (SQLException e) {
