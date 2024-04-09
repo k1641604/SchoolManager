@@ -9,32 +9,41 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import javax.swing.border.Border;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 
 public class SchoolManagerFrame extends JFrame{
 
+    DefaultTableModel tableModelTeacher = new DefaultTableModel();
+    DefaultTableModel tableModelStudent = new DefaultTableModel();
+    DefaultTableModel tableModelSection = new DefaultTableModel();
+    DefaultTableModel tableModelCourse = new DefaultTableModel();
     JMenuBar menubar = new JMenuBar();
     JMenu View = new JMenu("View");
     JMenu Help = new JMenu("Help");
     JMenu File = new JMenu("File");
         JLabel teachers = new JLabel("Teacher Information");
-        JTable teachersList = new JTable();
+        JTable teachersList = new JTable(tableModelTeacher);
+        JScrollPane teacherArea;
+
         JLabel tFirst = new JLabel("First Name");
         JTextField teacherFirstName = new JTextField();
         JLabel tLast = new JLabel("Last Name");
         JTextField teacherLastName = new JTextField();
     JLabel cListName = new JLabel("Course List");
-    JTable courseList = new JTable();
+    JTable courseList = new JTable(tableModelCourse);
+    JScrollPane courseArea;
     JLabel course = new JLabel("Course Name");
     JTextField courseName = new JTextField("");
-        JTable sectionList = new JTable();
-
+        JTable sectionList = new JTable(tableModelSection);
+        JScrollPane sectionArea;
         JLabel secTab = new JLabel("Sections Taught");
         JTable sectionsTab = new JTable();
     JTable enrollmentList;
     JScrollPane enrollmentPane = new JScrollPane();
         JLabel students = new JLabel("Student Information");
         JLabel schedule = new JLabel("Student Schedule");
-        JTable studentList = new JTable();
+        JTable studentList = new JTable(tableModelStudent);
+        JScrollPane studentArea;
         JLabel sFirst = new JLabel("First Name");
         JLabel sLast = new JLabel("Last Name");
         JTextField studentFirstName = new JTextField();
@@ -102,10 +111,14 @@ public class SchoolManagerFrame extends JFrame{
         add(teachers);
         teachers.setVisible(false);
 
-        teachersList.setBounds(20, 30, 300, 500);
-        teachersList.setBorder(oLine);
-        add(teachersList);
-        teachersList.setVisible(false);
+        teacherArea = new JScrollPane(teachersList);
+        teacherArea.setBounds(20, 30, 300, 500);
+        tableModelTeacher.addColumn("Teacher id");
+        tableModelTeacher.addColumn("First Name");
+        tableModelTeacher.addColumn("Last Name");
+        teacherArea.setBorder(oLine);
+        add(teacherArea);
+        teacherArea.setVisible(false);
 
             secTab.setBounds(400, 15,300, 15 );
             add(secTab);
@@ -153,10 +166,14 @@ public class SchoolManagerFrame extends JFrame{
         add(students);
         students.setVisible(false);
 
-        studentList.setBounds(20, 30, 300, 500);
-        studentList.setBorder(oLine);
-        add(studentList);
-        studentList.setVisible(false);
+        studentArea = new JScrollPane(studentList);
+        studentArea.setBounds(20, 30, 300, 500);
+        tableModelStudent.addColumn("Student id");
+        tableModelStudent.addColumn("First Name");
+        tableModelStudent.addColumn("Last Name");
+        studentArea.setBorder(oLine);
+        add(studentArea);
+        studentArea.setVisible(false);
 
             schedule.setBounds(400, 15, 300, 15);
             add(schedule);
@@ -204,10 +221,14 @@ public class SchoolManagerFrame extends JFrame{
         add(cListName);
         cListName.setVisible(false);
 
-        courseList.setBounds(20, 30, 300, 500);
-        courseList.setBorder(oLine);
-        add(courseList);
-        courseList.setVisible(false);
+        courseArea = new JScrollPane(courseList);
+        courseArea.setBounds(20, 30, 300, 500);
+        tableModelCourse.addColumn("Course id");
+        tableModelCourse.addColumn("Course Name");
+        tableModelCourse.addColumn("Type");
+        courseArea.setBorder(oLine);
+        add(courseArea);
+        courseArea.setVisible(false);
 
             course.setBounds(400, 15,300, 15 );
             add(course);
@@ -323,7 +344,7 @@ public class SchoolManagerFrame extends JFrame{
         System.out.println("aaaaaaaaaaaaaaaaaaaa");
         //setVisible(false);
         teachers.setVisible(true);
-        teachersList.setVisible(true);
+        teacherArea.setVisible(true);
         secTab.setVisible(true);
         sectionsTab.setVisible(true);
         tFirst.setVisible(true);
@@ -333,7 +354,6 @@ public class SchoolManagerFrame extends JFrame{
         addTeacher.setVisible(true);
         removeTeacher.setVisible(true);
         editTeacher.setVisible(true);
-
         /*try {File f = new File("TeacherInfo.txt");
             Scanner fromFile = new Scanner(f);
             String a = null;
@@ -345,6 +365,7 @@ public class SchoolManagerFrame extends JFrame{
             System.out.println("String is "+ a);}
         catch (Exception b){b.printStackTrace();
             System.out.println("Helo");}*/
+
         String[] columnNames = {"id", "First Name", "Last Name"};
         //teachersList = new JTable(teacherData, columnNames);
     }
@@ -357,13 +378,13 @@ public class SchoolManagerFrame extends JFrame{
         studentLastName.setVisible(false);
         students.setVisible(false);
         schedule.setVisible(false);
-        studentList.setVisible(false);
+        studentArea.setVisible(false);
         addStudent.setVisible(false);
         removeStudent.setVisible(false);
         editStudent.setVisible(false);
         enrollmentPane.setVisible(false);
         cListName.setVisible(false);
-        courseList.setVisible(false);
+        courseArea.setVisible(false);
         course.setVisible(false);
         courseName.setVisible(false);
         ACA.setVisible(false);
@@ -384,7 +405,7 @@ public class SchoolManagerFrame extends JFrame{
         //setVisible(false);
         students.setVisible(true);
         schedule.setVisible(true);
-        studentList.setVisible(true);
+        studentArea.setVisible(true);
         enrollmentPane.setVisible(true);
         tFirst.setVisible(true);
         studentFirstName.setVisible(true);
@@ -416,13 +437,13 @@ public class SchoolManagerFrame extends JFrame{
         teacherFirstName.setVisible(false);
         tLast.setVisible(false);
         teacherLastName.setVisible(false);
-        teachersList.setVisible(false);
+        teacherArea.setVisible(false);
         addTeacher.setVisible(false);
         removeTeacher.setVisible(false);
         editTeacher.setVisible(false);
         sectionsTab.setVisible(false);
         cListName.setVisible(false);
-        courseList.setVisible(false);
+        courseArea.setVisible(false);
         course.setVisible(false);
         courseName.setVisible(false);
         ACA.setVisible(false);
@@ -442,7 +463,7 @@ public class SchoolManagerFrame extends JFrame{
         System.out.println("cccccccccccccccccccc");
         //setVisible(false);
             cListName.setVisible(true);
-            courseList.setVisible(true);
+            courseArea.setVisible(true);
             course.setVisible(true);
             courseName.setVisible(true);
             ACA.setVisible(true);
@@ -500,9 +521,9 @@ public class SchoolManagerFrame extends JFrame{
         teacherFirstName.setVisible(false);
         tLast.setVisible(false);
         teacherLastName.setVisible(false);
-        teachersList.setVisible(false);
+        teacherArea.setVisible(false);
         sectionsTab.setVisible(false);
-        studentList.setVisible(false);
+        studentArea.setVisible(false);
         enrollmentPane.setVisible(false);
     }
 
@@ -541,7 +562,7 @@ public class SchoolManagerFrame extends JFrame{
         removeStudent.setVisible(false);
         editStudent.setVisible(false);
         cListName.setVisible(false);
-        courseList.setVisible(false);
+        courseArea.setVisible(false);
         course.setVisible(false);
         courseName.setVisible(false);
         ACA.setVisible(false);
