@@ -504,4 +504,18 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             throw new RuntimeException(e);
         }
     }
+    public void purge()
+    {try {
+        String state = "DROP TABLE IF EXISTS teacher;";
+        s.execute(state);
+        state = "DROP TABLE IF EXISTS student;";
+        s.execute(state);
+        state = "DROP TABLE IF EXISTS course;";
+        s.execute(state);
+        state = "DROP TABLE IF EXISTS section;";
+        s.execute(state);
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+    }
 }
