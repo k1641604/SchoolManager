@@ -55,6 +55,30 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         course.addActionListener(e ->{showCourse();});
         JMenuItem section = new JMenuItem ("Section");
         section.addActionListener(e ->{showSection();});
+        JRadioButton ACA = new JRadioButton("0) Academic");
+        JRadioButton KAP = new JRadioButton("1) KAP");
+        JRadioButton  AP = new JRadioButton("2) AP");
+        ButtonGroup bg = new ButtonGroup();
+
+        //should fail if textfield / type are left unfilled (pop-up window)
+        JButton addCourse = new JButton("Add course to List");
+
+        //should only appear after course has been selected
+        JButton removeCourse = new JButton("Remove Course from List");
+        JButton editCourse = new JButton("Save Changes to Course");
+
+        //should fail if first / last name are left unfilled (pop-up window)
+        JButton addStudent = new JButton("Add Student to List");
+        JButton addTeacher = new JButton("Add Teacher to List");
+
+        //should only appear after student has been selected
+        JButton removeStudent = new JButton("Remove Student from List");
+        JButton editStudent = new JButton("Save Changes to Student's Information");
+        JButton removeTeacher = new JButton("Remove Teacher from List");
+        JButton editTeacher  = new JButton("Delete Teacher from List");
+
+        JComboBox<Courses> courseBox = new JComboBox<Courses>();
+        JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
         view.add(teacher);
         view.add(student);
         view.add(course);

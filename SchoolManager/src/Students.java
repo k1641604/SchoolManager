@@ -9,6 +9,11 @@ public class Students implements Comparable{
         this.lastName = lastName;
     }
 
+    public Students(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public int getStudentID() {
         return studentID;
     }

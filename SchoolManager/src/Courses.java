@@ -9,6 +9,11 @@ public class Courses implements Comparable {
         this.type = type;
     }
 
+    public Courses(String title, int type) {
+        this.title = title;
+        this.type = type;
+    }
+
     public int getCourseID() {
         return courseID;
     }

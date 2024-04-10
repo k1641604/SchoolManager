@@ -9,6 +9,11 @@ public class Sections implements Comparable{
         this.teacherID = teacherID;
     }
 
+    public Sections(int courseID, int teacherID) {
+        this.courseID = courseID;
+        this.teacherID = teacherID;
+    }
+
     public int getSectionID() {
         return sectionID;
     }
