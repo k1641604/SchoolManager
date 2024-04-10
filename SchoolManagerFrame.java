@@ -11,6 +11,8 @@ import javax.swing.border.Border;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class SchoolManagerFrame extends JFrame{
 
     DefaultTableModel tableModelTeacher = new DefaultTableModel();
@@ -42,6 +44,7 @@ public class SchoolManagerFrame extends JFrame{
     JScrollPane enrollmentPane = new JScrollPane();
         JLabel students = new JLabel("Student Information");
         JLabel schedule = new JLabel("Student Schedule");
+        JLabel nuCourses = new JLabel("Available Courses");
         JTable studentList = new JTable(tableModelStudent);
         JScrollPane studentArea;
         JLabel sFirst = new JLabel("First Name");
@@ -74,6 +77,7 @@ public class SchoolManagerFrame extends JFrame{
     JButton editTeacher  = new JButton("Delete Teacher from List");
 
     JComboBox<Courses> courseBox = new JComboBox<Courses>();
+    JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
 
 
@@ -179,10 +183,19 @@ public class SchoolManagerFrame extends JFrame{
             add(schedule);
             schedule.setVisible(false);
 
-            enrollmentPane.setBounds(400, 30, 300, 200);
-            enrollmentPane.setBorder(oLine);
-            add(enrollmentPane);
-            enrollmentPane.setVisible(false);
+            courseBox.setBounds(400, 30, 300, 50);
+            courseBox.setBorder(oLine);
+            add(courseBox);
+            courseBox.setVisible(false);
+
+            nuCourses.setBounds(400, 135, 300, 15);
+            add(nuCourses);
+            nuCourses.setVisible(false);
+
+            available.setBounds(400, 150, 300, 50);
+            available.setBorder(oLine);
+            add(available);
+            available.setVisible(false);
 
             sFirst.setBounds(400, 265,130, 15);
             add(tFirst);
@@ -377,7 +390,9 @@ public class SchoolManagerFrame extends JFrame{
         studentFirstName.setVisible(false);
         studentLastName.setVisible(false);
         students.setVisible(false);
-        schedule.setVisible(false);
+        courseBox.setVisible(false);
+        nuCourses.setVisible(false);
+        available.setVisible(false);
         studentArea.setVisible(false);
         addStudent.setVisible(false);
         removeStudent.setVisible(false);
@@ -406,7 +421,9 @@ public class SchoolManagerFrame extends JFrame{
         students.setVisible(true);
         schedule.setVisible(true);
         studentArea.setVisible(true);
-        enrollmentPane.setVisible(true);
+        courseBox.setVisible(true);
+        nuCourses.setVisible(true);
+        available.setVisible(true);
         tFirst.setVisible(true);
         studentFirstName.setVisible(true);
         studentLastName.setVisible(true);
@@ -524,10 +541,19 @@ public class SchoolManagerFrame extends JFrame{
         teacherArea.setVisible(false);
         sectionsTab.setVisible(false);
         studentArea.setVisible(false);
-        enrollmentPane.setVisible(false);
+        courseBox.setVisible(false);
+        nuCourses.setVisible(false);
+        available.setVisible(false);
     }
 
-    public void courseAdder(){}
+    public void courseAdder(){
+        if (courseName.getText().isEmpty() || (rank != 0 && rank != 1 && rank != 2)){
+            int value = JOptionPane.showConfirmDialog(null, "Courses require a name and a proper rank (ie. ACA, KAP, AP)");
+        }
+        else {
+            System.out.println("Course name is "+courseName.getText()+" with a rank of "+rank);
+        }
+    }
     public void courseRemover(){}
     public void courseEditor(){}
 
@@ -553,7 +579,8 @@ public class SchoolManagerFrame extends JFrame{
         students.setVisible(false);
         schedule.setVisible(false);
         studentList.setVisible(false);
-        enrollmentPane.setVisible(false);
+        nuCourses.setVisible(false);
+        available.setVisible(false);
         tFirst.setVisible(false);
         studentFirstName.setVisible(false);
         studentLastName.setVisible(false);
