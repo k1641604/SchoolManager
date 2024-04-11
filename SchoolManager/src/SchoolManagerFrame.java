@@ -401,7 +401,20 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             {
                 String id = String.valueOf(rs.getInt("course_id"));
                 String title = rs.getString("title");
-                String type = String.valueOf(rs.getInt("type"));
+                int t = rs.getInt("type");
+                String type;
+                if(t == 0)
+                {
+                    type = "academic";
+                }
+                else if(t == 1)
+                {
+                    type = "KAP";
+                }
+                else
+                {
+                    type = "AP";
+                }
                 String[] toAdd = {id, title, type};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
