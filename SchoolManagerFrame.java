@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import javax.swing.border.Border;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -49,6 +50,7 @@ public class SchoolManagerFrame extends JFrame{
         JScrollPane studentArea;
         JLabel sFirst = new JLabel("First Name");
         JLabel sLast = new JLabel("Last Name");
+        JList studentStuff = new JList();
         JTextField studentFirstName = new JTextField();
         JTextField studentLastName = new JTextField();
 
@@ -76,9 +78,14 @@ public class SchoolManagerFrame extends JFrame{
     JButton removeTeacher = new JButton("Remove Teacher from List");
     JButton editTeacher  = new JButton("Delete Teacher from List");
 
-    JComboBox<Courses> courseBox = new JComboBox<Courses>();
+    JTable courseBox = new JTable();
     JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
+
+    ArrayList<Students> studentInfo = new ArrayList<Students>();
+    ArrayList<Teachers> teacherInfo = new ArrayList<Teachers>();
+    ArrayList<Courses> courseInfo = new ArrayList<Courses>();
+    ArrayList<Sections> sectionInfo = new ArrayList<Sections>();
 
 
     Connection con;
@@ -192,10 +199,6 @@ public class SchoolManagerFrame extends JFrame{
             add(nuCourses);
             nuCourses.setVisible(false);
 
-            available.setBounds(400, 150, 300, 50);
-            available.setBorder(oLine);
-            add(available);
-            available.setVisible(false);
 
             sFirst.setBounds(400, 265,130, 15);
             add(tFirst);
@@ -254,18 +257,21 @@ public class SchoolManagerFrame extends JFrame{
 
             ACA.setBounds(400, 100, 100, 30);
             ACA.setBorder(oLine);
+            ACA.addActionListener(e -> {setACA();});
             bg.add(ACA);
             add(ACA);
             ACA.setVisible(false);
 
             KAP.setBounds(400, 130, 75, 30);
             KAP.setBorder(oLine);
+            KAP.addActionListener(e -> {setKAP();});
             bg.add(KAP);
             add(KAP);
             KAP.setVisible(false);
 
             AP.setBounds(400, 160, 75, 30);
             AP.setBorder(oLine);
+            AP.addActionListener(e -> {setAP();});
             bg.add(AP);
             add(AP);
             AP.setVisible(false);
@@ -392,7 +398,6 @@ public class SchoolManagerFrame extends JFrame{
         students.setVisible(false);
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
-        available.setVisible(false);
         studentArea.setVisible(false);
         addStudent.setVisible(false);
         removeStudent.setVisible(false);
@@ -423,7 +428,6 @@ public class SchoolManagerFrame extends JFrame{
         studentArea.setVisible(true);
         courseBox.setVisible(true);
         nuCourses.setVisible(true);
-        available.setVisible(true);
         tFirst.setVisible(true);
         studentFirstName.setVisible(true);
         studentLastName.setVisible(true);
@@ -431,17 +435,18 @@ public class SchoolManagerFrame extends JFrame{
         addStudent.setVisible(true);
         removeStudent.setVisible(true);
         editStudent.setVisible(true);
-                /*try {File f = new File("StudentInfo.txt");
-            Scanner fromFile = new Scanner(f);
+                try {File stu = new File("StudentInfo.txt");
+            Scanner fromFile = new Scanner(stu);
             String a = null;
             while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
                 if (parts.equals("")){break;}
-                Student s = new Student();
-                info.add(s);
-                stuff.setListData(info.toArray());}
+                Students s = new Students(Integer.parseInt(parts[0]), parts[1], parts[2]);
+                studentInfo.add(s);
+               //studentList.(studentInfo.toArray());
+            }
             System.out.println("String is "+ a);}
         catch (Exception b){b.printStackTrace();
-            System.out.println("Helo");}*/
+            System.out.println("Helo");}
         String[] columnNames = {"id", "First Name", "Last Name"};
         //studentList = new JTable(studentData, columnNames);
     }
@@ -471,8 +476,22 @@ public class SchoolManagerFrame extends JFrame{
         editCourse.setVisible(false);
     }
 
-    public void studentAdder(){}
-    public void studentRemover(){}
+    public void studentAdder(){
+        if (studentFirstName.getText().isEmpty() || studentLastName.getText().isEmpty()){
+            int value = JOptionPane.showConfirmDialog(null, "Students require a First AND a Last name");
+        }
+        else{
+            System.out.println("Student "+studentFirstName.getText()+" "+studentLastName.getText()+" was added to the list");
+        }
+    }
+    public void studentRemover(){
+        //if (/*should check if the student that is being removed actually exists*/){
+        //    int value = JOptionPane.showConfirmDialog(null, "A student which exists in the system must be selected");
+        //}
+       // else {
+       //     System.out.println("Student "+studentFirstName.getText()+" "+studentLastName.getText()+" has been removed from the list");
+       // }
+    }
     public void studentEditor(){}
 
     public void coursesTable(){
@@ -517,6 +536,16 @@ public class SchoolManagerFrame extends JFrame{
         }
 
     }
+    public void setACA(){rank = 0;
+        System.out.println("Course rank is Academic");
+    }
+    public void setKAP(){rank = 1;
+        System.out.println("Course rank is KAP");
+    }
+    public void setAP(){rank = 2;
+        System.out.println("Course rank is AP");
+    }
+
     public void openCourse(){
         //all JTextFields should be reset if another menu is opened
         //More things need to be added as more tables, labels, textfields, etc are added to the program
@@ -543,7 +572,6 @@ public class SchoolManagerFrame extends JFrame{
         studentArea.setVisible(false);
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
-        available.setVisible(false);
     }
 
     public void courseAdder(){
@@ -580,7 +608,6 @@ public class SchoolManagerFrame extends JFrame{
         schedule.setVisible(false);
         studentList.setVisible(false);
         nuCourses.setVisible(false);
-        available.setVisible(false);
         tFirst.setVisible(false);
         studentFirstName.setVisible(false);
         studentLastName.setVisible(false);
