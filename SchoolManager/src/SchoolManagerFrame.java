@@ -37,6 +37,8 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+
         JMenu file = new JMenu("File");
         JMenuItem exportData = new JMenuItem ("Export Data");
         JMenuItem importData = new JMenuItem ("Import Data");
@@ -559,5 +561,38 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         }
         this.setVisible(false);
         this.dispose();
+    }
+    public void newTables(Statement stat)
+    {
+        try {
+            String state = "DROP TABLE IF EXISTS teacher;";
+            s.execute(state);
+            state = "DROP TABLE IF EXISTS student;";
+            s.execute(state);
+            state = "DROP TABLE IF EXISTS course;";
+            s.execute(state);
+            state = "DROP TABLE IF EXISTS section;";
+            s.execute(state);
+            state = "DROP TABLE IF EXISTS enrollment;";
+            s.execute(state);
+            state = "CREATE TABLE IF NOT EXISTS teacher (teacher_id INTEGER Not Null Primary Key AUTO_INCREMENT, " +
+                    "first_name Text, " +
+                    "last_name Text" +
+                    ");";
+            state = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null Primary Key AUTO_INCREMENT, " +
+                    "first_name Text, " +
+                    "last_name Text" +
+                    ");";
+            state = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null Primary Key AUTO_INCREMENT, " +
+                    "title Text Not Null, " +
+                    "type INTEGER Not Null" +
+                    ");";
+            state = "CREATE TABLE IF NOT EXISTS section   (course_id INTEGER Not Null Primary Key AUTO_INCREMENT, " +
+                    "title Text Not Null, " +
+                    "type INTEGER Not Null" +
+                    ");";
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
