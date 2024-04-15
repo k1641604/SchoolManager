@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -14,7 +16,7 @@ import javax.swing.JTextField;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class SchoolManagerFrameMod extends JFrame{
+public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     DefaultTableModel tableModelTeacher = new DefaultTableModel();
     DefaultTableModel tableModelStudent = new DefaultTableModel();
@@ -160,7 +162,7 @@ public class SchoolManagerFrameMod extends JFrame{
             teacherLastName.setVisible(false);
 
             addTeacher.setBounds(400, 340, 300, 30);
-            addTeacher.addActionListener(e -> {teacherAdder();});
+            addTeacher.addActionListener(e -> {addTeacherButton();});
             add(addTeacher);
             addTeacher.setVisible(false);
 
@@ -220,7 +222,7 @@ public class SchoolManagerFrameMod extends JFrame{
             studentLastName.setVisible(false);
 
             addStudent.setBounds(400, 340, 300, 30);
-            addStudent.addActionListener(e -> {studentAdder();});
+            addStudent.addActionListener(e -> {addStudentButton();});
             add(addStudent);
             addStudent.setVisible(false);
 
@@ -279,7 +281,7 @@ public class SchoolManagerFrameMod extends JFrame{
 
         addCourse.setBounds(400, 220, 300, 30);
         add(addCourse);
-        addCourse.addActionListener(e -> {courseAdder();});
+        addCourse.addActionListener(e -> {addCourseButton();});
         addCourse.setVisible(false);
 
         removeCourse.setBounds(400, 280, 300, 30);
@@ -300,17 +302,8 @@ public class SchoolManagerFrameMod extends JFrame{
 
 
         try {
-            File f = new File("SchoolManager.txt");
-            Scanner fromFile = new Scanner(f);
-            String a = null;
-            while(fromFile.hasNextLine()){
-
-                String[] parts = fromFile.nextLine().split(",");
-                if (parts.equals("")){
-                    break;
-                }
-            }
-            System.out.println("String is "+ a);
+            readFile();
+            readFile();
         }
         catch (Exception b){
             b.printStackTrace();
@@ -654,7 +647,7 @@ public class SchoolManagerFrameMod extends JFrame{
                 tableMod.addRow(toAdd);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
     public void addToJTableDataStudent()
@@ -734,38 +727,72 @@ public class SchoolManagerFrameMod extends JFrame{
     }
     public void addToSqlTeacher(Teachers t)
     {
-        String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
         try {
-            this.s.execute(state);
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            this.con = con;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
+        try {
+            Statement te = this.con.createStatement();
+            boolean value = te.execute(state);
+            System.out.println("executed statement");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void addToSqlStudent(Students st)
     {
-        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + st.getFirstName() +"', '" + st.getLastName() + "');";
         try {
-            this.s.execute(state);
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            this.con = con;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + st.getFirstName() +"', '" + st.getLastName() + "');";
+        try {
+            Statement stu = this.con.createStatement();
+            boolean value = stu.execute(state);
+            System.out.println("executed statement");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void addToSqlCourse(Courses c)
     {
-        String state = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
         try {
-            this.s.execute(state);
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            this.con = con;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        String state = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
+        try {
+            Statement co = this.con.createStatement();
+            boolean value = co.execute(state);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void addToSqlSection(Sections se)
     {
-        String state = "INSERT INTO section (course, teacher) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
         try {
-            s.execute(state);
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            this.con = con;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        String state = "INSERT INTO section (course, teacher) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
+        try {
+            Statement sec = this.con.createStatement();
+            boolean value = sec.execute(state);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void readFile()
@@ -966,7 +993,8 @@ public class SchoolManagerFrameMod extends JFrame{
             JOptionPane.showMessageDialog(this, "Please complete all fields!");
             return ;
         }
-        Teachers t = new Teachers(teacherFirstName.getText(), teacherFirstName.getText());
+        Teachers t = new Teachers(teacherFirstName.getText(), teacherLastName.getText());
+        System.out.println(t);
         teacherInfo.add(t);
         addToSqlTeacher(t);
         addToJTableDataTeachers();
@@ -1012,17 +1040,57 @@ public class SchoolManagerFrameMod extends JFrame{
         addToJTableDataCourses();
     }
     /*public void addEnrollmentButton()
-    {
-        if(studentFirstName.getText().equals("") || studentLastName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Please complete all fields!");
-            return ;
+            if(studentFirstName.getText().equals("") || studentLastName.getText().equals(""))
+            {
+                JOptionPane.showMessageDialog(this, "Please complete all fields!");
+                return ;
+            }
+            Students t = new Students(studentFirstName.getText(), studentLastName.getText());
+            studentInfo.add(t);
+            addToSqlStudent(t);
+            addToJTableDataStudent();
+        }*/
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        fileSave();
+        try {
+            this.con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        Students t = new Students(studentFirstName.getText(), studentLastName.getText());
-        studentInfo.add(t);
-        addToSqlStudent(t);
-        addToJTableDataStudent();
-    }*/
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
 }
 
 

@@ -41,7 +41,11 @@ public class Teachers implements Comparable{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
+    @Override
+    public String toString()
+    {
+        return this.firstName + " " + this.lastName;
+    }
     @Override
     public int compareTo(Object o) {
         return 0;
