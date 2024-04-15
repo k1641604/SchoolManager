@@ -8,7 +8,7 @@ public class SchoolManagerMain {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/SchoolManager","root","password");
             Statement s = con.createStatement();
-            new SchoolManagerFrame(con);
+            new SchoolManagerFrameMod(con);
             con.close();
         }
         catch(Exception e){

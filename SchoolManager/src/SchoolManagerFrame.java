@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.io.File;
@@ -239,44 +239,88 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
             }
             FileWriter fileWriter = new FileWriter(f,false);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            for(Teachers c : teacher)
-            {
-                printWriter.println(c.toStore());
+            String state =  "select * from teacher where teacher_id>-1";
+            try {
+                ResultSet rs = this.s.executeQuery(state);
+                while(rs.next())
+                {
+                    String id = String.valueOf(rs.getInt("teacher_id"));
+                    String first = rs.getString("first_name");
+                    String last = rs.getString("last_name");
+                    printWriter.println(id +"," + first + "," + last);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             fileWriter.close();
             printWriter.close();
 
             fileWriter = new FileWriter(f1,false);
             printWriter = new PrintWriter(fileWriter);
-            for(Students c : student)
-            {
-                printWriter.println(c.toStore());
+            state = "select * from student";
+            try {
+                ResultSet rs = this.s.executeQuery(state);
+                while(rs.next())
+                {
+                    String id = String.valueOf(rs.getInt("student_id"));
+                    String first = rs.getString("first_name");
+                    String last = rs.getString("last_name");
+                    printWriter.println(id +"," + first + "," + last);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             fileWriter.close();
             printWriter.close();
 
             fileWriter = new FileWriter(f2,false);
             printWriter = new PrintWriter(fileWriter);
-            for(Courses c : course)
-            {
-                printWriter.println(c.toStore());
+            state = "select * from courses";
+            try {
+                ResultSet rs = this.s.executeQuery(state);
+                while(rs.next())
+                {
+                    String id = String.valueOf(rs.getInt("course_id"));
+                    String title = rs.getString("title");
+                    String t = String.valueOf(rs.getInt("type"));
+                    printWriter.println(id + "," + title + "," + t);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             fileWriter.close();
             printWriter.close();
 
             fileWriter = new FileWriter(f3,false);
             printWriter = new PrintWriter(fileWriter);
-            for(Sections c : section)
-            {
-                printWriter.println(c.toStore());
+            state = "select * from sections";
+            try {
+                ResultSet rs = this.s.executeQuery(state);
+                while(rs.next())
+                {
+                    String sec = rs.getString("section_id");
+                    String cou = String.valueOf(rs.getInt("course_id"));
+                    String teach = String.valueOf(rs.getInt("teacher_id"));
+                    printWriter.println(sec + "," + cou + "," + teach);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             fileWriter.close();
             printWriter.close();
             fileWriter = new FileWriter(f4,false);
             printWriter = new PrintWriter(fileWriter);
-            for(Enrollment c : enrollment)
-            {
-                printWriter.println(c.toStore());
+            state = "select * from enrollment";
+            try {
+                ResultSet rs = this.s.executeQuery(state);
+                while(rs.next())
+                {
+                    String sec = String.valueOf(rs.getInt("section_id"));
+                    String stu = String.valueOf(rs.getInt("student_id"));
+                    printWriter.println(sec + "," + stu);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             fileWriter.close();
             printWriter.close();
@@ -596,3 +640,4 @@ public class SchoolManagerFrame extends JFrame implements WindowListener{
         }
     }
 }
+*/
