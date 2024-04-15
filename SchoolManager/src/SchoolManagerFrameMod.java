@@ -322,6 +322,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             n.execute(s);
             s = "CREATE TABLE IF NOT EXISTS enrollment (section_id INTEGER Not Null, student_id INTEGER Not Null , PRIMARY KEY(section_id,student_id), FOREIGN KEY(section_id) references section(section_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(student_id) references student(student_id) ON DELETE CASCADE ON UPDATE CASCADE);";
             n.execute(s);
+            s = "INSERT INTO teacher (teacher_id, first_name, last_name) VALUES (-1, 'Teacher', 'No');";
 
 
         } catch (SQLException e) {
@@ -457,18 +458,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addStudent.setVisible(true);
         removeStudent.setVisible(true);
         editStudent.setVisible(true);
-                try {File stu = new File("StudentInfo.txt");
-            Scanner fromFile = new Scanner(stu);
-            String a = null;
-            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
-                if (parts.equals("")){break;}
-                Students s = new Students(Integer.parseInt(parts[0]), parts[1], parts[2]);
-                studentInfo.add(s);
-               //studentList.(studentInfo.toArray());
-            }
-            System.out.println("String is "+ a);}
-        catch (Exception b){b.printStackTrace();
-            System.out.println("Helo");}
         String[] columnNames = {"id", "First Name", "Last Name"};
         //studentList = new JTable(studentData, columnNames);
     }
@@ -663,15 +652,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         //referenced code from Knowledge to Share's YouTube video;
         String state = "select * from teacher where teacher_id>-1";
-        try {
-            ResultSet rs = this.s.executeQuery(state);
-            while(rs.next())
+        try {Connection con= DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jt = con.createStatement();
+            ResultSet rst = jt.executeQuery(state);
+            DefaultTableModel tableMod =  (DefaultTableModel) teachersList.getModel();
+            tableMod.setRowCount(0);
+            while(rst.next())
             {
-                String id = String.valueOf(rs.getInt("teacher_id"));
-                String first = rs.getString("first_name");
-                String last = rs.getString("last_name");
+                String id = String.valueOf(rst.getInt("teacher_id"));
+                String first = rst.getString("first_name");
+                String last = rst.getString("last_name");
+                System.out.println();
                 String[] toAdd = {id, first, last};
-                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
                 repaint();
             }
@@ -684,14 +677,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         //referenced code from Knowledge to Share's YouTube video;
         String state = "select * from student";
         try {
-            ResultSet rs = this.s.executeQuery(state);
-            while(rs.next())
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement js = con.createStatement();
+            ResultSet rss = js.executeQuery(state);
+            DefaultTableModel tableMod =  (DefaultTableModel) studentList.getModel();
+            tableMod.setRowCount(0);
+            while(rss.next())
             {
-                String id = String.valueOf(rs.getInt("student_id"));
-                String first = rs.getString("first_name");
-                String last = rs.getString("last_name");
+                String id = String.valueOf(rss.getInt("student_id"));
+                String first = rss.getString("first_name");
+                String last = rss.getString("last_name");
                 String[] toAdd = {id, first, last};
-                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
                 repaint();
             }
@@ -702,16 +699,20 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void addToJTableDataCourses()
     {
         //referenced code from Knowledge to Share's YouTube video;
-        String state = "select * from courses";
+        String state = "select * from course";
         try {
-            ResultSet rs = this.s.executeQuery(state);
-            while(rs.next())
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jc = con.createStatement();
+            ResultSet rsc = jc.executeQuery(state);
+            DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
+            tableMod.setRowCount(0);
+            while(rsc.next())
             {
-                String id = String.valueOf(rs.getInt("course_id"));
-                String title = rs.getString("title");
-                String type = String.valueOf(rs.getInt("type"));
+                String id = String.valueOf(rsc.getInt("course_id"));
+                String title = rsc.getString("course_name");
+                String type = String.valueOf(rsc.getInt("type"));
                 String[] toAdd = {id, title, type};
-                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
                 repaint();
             }
@@ -724,14 +725,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         //referenced code from Knowledge to Share's YouTube video;
         String state = "select * from sections";
         try {
-            ResultSet rs = this.s.executeQuery(state);
-            while(rs.next())
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jsc = con.createStatement();
+            ResultSet rsse = jsc.executeQuery(state);
+            DefaultTableModel tableMod =  (DefaultTableModel) sectionList.getModel();
+            tableMod.setRowCount(0);
+            while(rsse.next())
             {
-                String sec = rs.getString("section_id");
-                String cou = String.valueOf(rs.getInt("course_id"));
-                String teach = String.valueOf(rs.getInt("teacher_id"));
+                String sec = rsse.getString("section_id");
+                String cou = String.valueOf(rsse.getInt("course_id"));
+                String teach = String.valueOf(rsse.getInt("teacher_id"));
                 String[] toAdd = {sec, cou, teach};
-                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
                 repaint();
             }
@@ -745,14 +750,15 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         String state = "select * from enrollment";
         try {
             ResultSet rs = this.s.executeQuery(state);
+            DefaultTableModel tableMod =  (DefaultTableModel) enrollmentList.getModel();
+            tableMod.setRowCount(0);
             while(rs.next())
             {
                 String sec = String.valueOf(rs.getInt("section_id"));
                 String stu = String.valueOf(rs.getInt("student_id"));
                 String[] toAdd = {sec, stu};
-                DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
-                
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -763,15 +769,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            this.con = con;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
-        try {
-            Statement te = this.con.createStatement();
+            String state = "INSERT INTO teacher (first_name, last_name) VALUES ('" + t.getFirstName() +"', '" + t.getLastName() + "');";
+            Statement te = con.createStatement();
             boolean value = te.execute(state);
             System.out.println("executed statement");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -781,13 +783,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            this.con = con;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        String state = "INSERT INTO student (first_name, last_name) VALUES ('" + st.getFirstName() +"', '" + st.getLastName() + "');";
-        try {
-            Statement stu = this.con.createStatement();
+            String state = "INSERT INTO student (first_name, last_name) VALUES ('" + st.getFirstName() +"', '" + st.getLastName() + "');";
+            Statement stu = con.createStatement();
             boolean value = stu.execute(state);
             System.out.println("executed statement");
         } catch (SQLException e) {
@@ -799,13 +796,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            this.con = con;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        String state = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
-        try {
-            Statement co = this.con.createStatement();
+            String state = "INSERT INTO course (course_name, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
+            Statement co = con.createStatement();
             boolean value = co.execute(state);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -816,12 +808,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            this.con = con;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        String state = "INSERT INTO section (course, teacher) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
-        try {
+            String state = "INSERT INTO section (course_id, teacher_id) VALUES (" + se.getCourseID() +", " + se.getTeacherID() + ");";
             Statement sec = this.con.createStatement();
             boolean value = sec.execute(state);
         } catch (SQLException e) {
@@ -1031,6 +1018,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         teacherInfo.add(t);
         addToSqlTeacher(t);
         addToJTableDataTeachers();
+        teacherFirstName.setText("");
+        teacherLastName.setText("");
     }
     public void addStudentButton()
     {
@@ -1043,17 +1032,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         studentInfo.add(t);
         addToSqlStudent(t);
         addToJTableDataStudent();
+        studentFirstName.setText("");
+        studentLastName.setText("");
     }
     public void addCourseButton()
     {
         int a;
-        if(bg.getSelection().equals(ACA))
+        if(ACA.isSelected())
         {
             a = 0;
-        } else if (bg.getSelection().equals(KAP)) {
+        } else if (KAP.isSelected()) {
             a = 1;
         }
-        else if(bg.getSelection().equals(AP))
+        else if(AP.isSelected())
         {
             a = 2;
         }
@@ -1071,6 +1062,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseInfo.add(t);
         addToSqlCourse(t);
         addToJTableDataCourses();
+        courseName.setText("");
+
     }
     /*public void addEnrollmentButton()
         {
