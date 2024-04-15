@@ -298,7 +298,35 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             sectionList.setBorder(oLine);
             add(sectionList);
             sectionList.setVisible(false);
+        try {
+            Connection connect = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement n = connect.createStatement();
+            String s = "DROP TABLE IF EXISTS enrollment;";
+            n.execute(s);
+            s = "DROP TABLE IF EXISTS section;";
+            n.execute(s);
+            s = "DROP TABLE IF EXISTS teacher;";
+            n.execute(s);
+            s = "DROP TABLE IF EXISTS student;";
+            n.execute(s);
+            s = "DROP TABLE IF EXISTS course;";
+            n.execute(s);
+            s = "CREATE TABLE IF NOT EXISTS teacher (teacher_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(teacher_id));";
+            n.execute(s);
+            s = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(student_id));";
+            n.execute(s);
+            s = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, course_name Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
+            n.execute(s);
+            s = "CREATE TABLE IF NOT EXISTS section (section_id INTEGER Not Null AUTO_INCREMENT, course_id INTEGER Not Null,  teacher_id INTEGER Not Null, PRIMARY KEY(section_id), FOREIGN KEY(course_id) references course(course_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(teacher_id) references teacher(teacher_id) ON DELETE CASCADE ON UPDATE CASCADE);";
+            n.execute(s);
+            s = "CREATE TABLE IF NOT EXISTS enrollment (section_id INTEGER Not Null, student_id INTEGER Not Null , PRIMARY KEY(section_id,student_id), FOREIGN KEY(section_id) references section(section_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(student_id) references student(student_id) ON DELETE CASCADE ON UPDATE CASCADE);";
+            n.execute(s);
 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
         try {
@@ -645,6 +673,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] toAdd = {id, first, last};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
+                repaint();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -664,6 +693,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] toAdd = {id, first, last};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
+                repaint();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -683,6 +713,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] toAdd = {id, title, type};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
+                repaint();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -702,6 +733,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] toAdd = {sec, cou, teach};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
+                repaint();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -720,6 +752,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] toAdd = {sec, stu};
                 DefaultTableModel tableMod =  (DefaultTableModel) courseList.getModel();
                 tableMod.addRow(toAdd);
+                
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
