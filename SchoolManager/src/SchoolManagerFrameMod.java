@@ -710,7 +710,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {
                 String id = String.valueOf(rsc.getInt("course_id"));
                 String title = rsc.getString("course_name");
-                String type = String.valueOf(rsc.getInt("type"));
+                int t = rsc.getInt("type");
+                String type;
+                if(t == 0)
+                {
+                    type = "ACA";
+                } else if (t == 1) {
+                    type = "KAP";
+                }
+                else
+                {
+                    type = "AP";
+                }
                 String[] toAdd = {id, title, type};
                 tableMod.addRow(toAdd);
                 repaint();
@@ -1089,7 +1100,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addToSqlCourse(t);
         addToJTableDataCourses();
         courseName.setText("");
-
+        bg.clearSelection();
     }
     /*public void addEnrollmentButton()
         {
