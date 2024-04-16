@@ -1116,7 +1116,52 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void windowDeactivated(WindowEvent e) {
 
     }
+    public void removeItemTeacher()
+    {
+        if(teachersList.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) teachersList.getModel();
 
+    }
+    public void removeItemStudent()
+    {
+        if(studentList.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) studentList.getModel();
+    }
+    public void removeItemCourse()
+    {
+        if(courseList.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) courseList.getModel();
+    }
+    public void removeItemSection()
+    {
+        if(sectionList.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) sectionList.getModel();
+    }
+    public void removeItemEnrollment()
+    {
+        if(enrollmentList.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) enrollmentList.getModel();
+    }
 }
 
 
