@@ -101,7 +101,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 super("School Manager");
                 setSize(800, 700);
                 setLayout(null);
-                setDefaultCloseOperation(EXIT_ON_CLOSE);
+                addWindowListener(this);
                 Border oLine = BorderFactory.createLineBorder(Color.black);
                 this.con = c;
                 try {
@@ -331,7 +331,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
 
         try {
-            readFile();
             readFile();
         }
         catch (Exception b){
@@ -827,7 +826,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] parts = from.nextLine().split(",");
                 Teachers c;
                 c = new Teachers(Integer.parseInt(parts[0]), parts[1], parts[2]);
+                System.out.println(c.toStore());
                 teacherInfo.add(c);
+                addToSqlTeacher(c);
+                addToJTableDataTeachers();
             }
             from.close();
             File f1 = new File("Student.csv");
@@ -840,6 +842,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Students c;
                 c = new Students(Integer.parseInt(parts[0]), parts[1], parts[2]);
                 studentInfo.add(c);
+                addToSqlStudent(c);
+                addToJTableDataStudent();
             }
             from.close();
             File f2 = new File("Course.csv");
@@ -852,6 +856,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Courses c;
                 c = new Courses(Integer.parseInt(parts[0]), parts[1], Integer.parseInt(parts[2]));
                 courseInfo.add(c);
+                addToSqlCourse(c);
+                addToJTableDataCourses();
             }
             from.close();
             File f3 = new File("Section.csv");
@@ -864,6 +870,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Sections c;
                 c = new Sections(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 sectionInfo.add(c);
+                addToSqlSection(c);
+                addToJTableDataSections();
             }
             from.close();
             File f4 = new File("Enrollment.csv");
@@ -876,6 +884,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Enrollment c;
                 c = new Enrollment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
                 enrollmentInfo.add(c);
+                //addToSqlEnrollment(c);
+                addToJTableDataEnrollment();
             }
             from.close();
         }
@@ -889,40 +899,24 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try
         {
             File f = new File("Teacher.csv");
-            File f1 = new File("Student.csv");
-            File f2 = new File("Course.csv");
-            File f3 = new File("Selection.csv");
-            File f4 = new File("Enrollment.csv");
             if(!f.exists())
             {
                 f.createNewFile();
             }
-            if(!f1.exists())
-            {
-                f1.createNewFile();
-            }
-            if(!f2.exists())
-            {
-                f2.createNewFile();
-            }
-            if(!f3.exists())
-            {
-                f3.createNewFile();
-            }
-            if(!f4.exists())
-            {
-                f4.createNewFile();
-            }
             FileWriter fileWriter = new FileWriter(f,false);
             PrintWriter printWriter = new PrintWriter(fileWriter);
+            Connection connect = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement fs = connect.createStatement();
             String state =  "select * from teacher where teacher_id>-1";
             try {
-                ResultSet rs = this.s.executeQuery(state);
+                ResultSet rs = fs.executeQuery(state);
                 while(rs.next())
                 {
                     String id = String.valueOf(rs.getInt("teacher_id"));
                     String first = rs.getString("first_name");
                     String last = rs.getString("last_name");
+                    System.out.println(id +"," + first + "," + last);
                     printWriter.println(id +"," + first + "," + last);
                 }
             } catch (SQLException e) {
@@ -931,11 +925,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             fileWriter.close();
             printWriter.close();
 
+            File f1 = new File("Student.csv");
+            if(!f1.exists())
+            {
+                f1.createNewFile();
+            }
+            Connection connects = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement fss = connects.createStatement();
             fileWriter = new FileWriter(f1,false);
             printWriter = new PrintWriter(fileWriter);
             state = "select * from student";
             try {
-                ResultSet rs = this.s.executeQuery(state);
+                ResultSet rs = fss.executeQuery(state);
                 while(rs.next())
                 {
                     String id = String.valueOf(rs.getInt("student_id"));
@@ -949,15 +951,23 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             fileWriter.close();
             printWriter.close();
 
+            File f2 = new File("Course.csv");
+            if(!f2.exists())
+            {
+                f2.createNewFile();
+            }
+            Connection connectss = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement fsss = connectss.createStatement();
             fileWriter = new FileWriter(f2,false);
             printWriter = new PrintWriter(fileWriter);
-            state = "select * from courses";
+            state = "select * from course";
             try {
-                ResultSet rs = this.s.executeQuery(state);
+                ResultSet rs = fsss.executeQuery(state);
                 while(rs.next())
                 {
                     String id = String.valueOf(rs.getInt("course_id"));
-                    String title = rs.getString("title");
+                    String title = rs.getString("course_name");
                     String t = String.valueOf(rs.getInt("type"));
                     printWriter.println(id + "," + title + "," + t);
                 }
@@ -966,12 +976,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             }
             fileWriter.close();
             printWriter.close();
-
+            File f3 = new File("section.csv");
+            if(!f3.exists())
+            {
+                f3.createNewFile();
+            }
+            Connection connectsss = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement fssss = connectsss.createStatement();
             fileWriter = new FileWriter(f3,false);
             printWriter = new PrintWriter(fileWriter);
-            state = "select * from sections";
+            state = "select * from section";
             try {
-                ResultSet rs = this.s.executeQuery(state);
+                ResultSet rs = fssss.executeQuery(state);
                 while(rs.next())
                 {
                     String sec = rs.getString("section_id");
@@ -984,11 +1001,20 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             }
             fileWriter.close();
             printWriter.close();
+
+            File f4 = new File("Enrollment.csv");
+            if(!f4.exists())
+            {
+                f4.createNewFile();
+            }
+            Connection connectssss = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement fsssss = connectssss.createStatement();
             fileWriter = new FileWriter(f4,false);
             printWriter = new PrintWriter(fileWriter);
             state = "select * from enrollment";
             try {
-                ResultSet rs = this.s.executeQuery(state);
+                ResultSet rs = fsssss.executeQuery(state);
                 while(rs.next())
                 {
                     String sec = String.valueOf(rs.getInt("section_id"));
@@ -1084,17 +1110,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
+        System.out.println("trying to save file");
         fileSave();
         try {
             this.con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
     }
 
     @Override
