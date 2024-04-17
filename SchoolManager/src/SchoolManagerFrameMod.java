@@ -78,7 +78,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton removeStudent = new JButton("Remove Student from List");
     JButton editStudent = new JButton("Save Changes to Student's Information");
     JButton removeTeacher = new JButton("Remove Teacher from List");
-    JButton editTeacher  = new JButton("Delete Teacher from List");
+    JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
 
     JTable courseBox = new JTable();
     JComboBox<Courses> available = new JComboBox<Courses>();

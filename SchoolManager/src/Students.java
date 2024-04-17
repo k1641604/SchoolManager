@@ -1,4 +1,4 @@
-public class Students implements Comparable{
+public class Students implements Comparable<Students>{
     private int studentID;
     private String firstName;
     private String lastName;
@@ -42,12 +42,11 @@ public class Students implements Comparable{
         this.lastName = lastName;
     }
 
+
+
+
     @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-    public int rosterCompare(Students s)
-    {
+    public int compareTo(Students s) {
         if(s.getLastName().equals(this.getLastName()))
         {
             if(s.getFirstName().equals(this.getFirstName()))
