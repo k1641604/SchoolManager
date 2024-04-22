@@ -81,6 +81,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
 
     JTable courseBox = new JTable();
+    JLabel secInfo = new JLabel("Course id");
+    JLabel tid = new JLabel("Teacher id");
     JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
 
@@ -322,6 +324,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             sectionArea.setBounds(20, 30, 300, 500);
         sectionArea.setBorder(oLine);
         add(sectionArea);
+        secInfo.setBounds(20, 15, 300, 15);
+        add(secInfo);
+        secInfo.setVisible(false);
         //available.setBounds();
         sectionArea.setVisible(false);
         try {
@@ -461,6 +466,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         AP.setVisible(false);
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
+        secInfo.setVisible(false);
+
     }
 
     public void teacherAdder(){}
@@ -509,6 +516,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         AP.setVisible(false);
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
+        secInfo.setVisible(false);
+
     }
 
     public void studentAdder(){
@@ -607,6 +616,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         studentArea.setVisible(false);
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
+        secInfo.setVisible(false);
     }
 
     public void courseAdder(){
@@ -623,6 +633,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
         sectionArea.setVisible(true);
+        secInfo.setVisible(true);
         openSection();
         //addToJTableDataSections();
 
