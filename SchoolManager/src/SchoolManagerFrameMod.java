@@ -81,8 +81,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
 
     JTable courseBox = new JTable();
-    JLabel secInfo = new JLabel("Course id");
+    JLabel secInfo = new JLabel("Section Information");
+    JLabel cid = new JLabel("Course id");
+    JLabel cidData = new JLabel("");
     JLabel tid = new JLabel("Teacher id");
+    JLabel tidData = new JLabel("");
     JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
 
@@ -182,8 +185,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             add(removeTeacher);
             removeTeacher.setVisible(false);
 
-            editTeacher.setBounds(400, 460, 300, 30);
-            editTeacher.addActionListener(e -> {teacherEditor();});
+            editTeacher.setBounds(400, 340, 300, 30);
+            editTeacher.addActionListener(e -> {editSelectionTeacher();});
             add(editTeacher);
             editTeacher.setVisible(false);
 
@@ -247,8 +250,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             add(removeStudent);
             removeStudent.setVisible(false);
 
-            editStudent.setBounds(400, 460, 300, 30);
-            editStudent.addActionListener(e -> {studentEditor();});
+            editStudent.setBounds(400, 340, 300, 30);
+            editStudent.addActionListener(e -> {editSelectionStudent();});
             add(editStudent);
             editStudent.setVisible(false);
 
@@ -309,7 +312,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         removeCourse.addActionListener(e -> {removeItemCourse();});
         removeCourse.setVisible(false);
 
-        editCourse.setBounds(400, 340, 300, 30);
+        editCourse.setBounds(400, 220, 300, 30);
         add(editCourse);
         editCourse.addActionListener(e -> {courseEditor();});
         editCourse.setVisible(false);
@@ -329,6 +332,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(false);
         //available.setBounds();
         sectionArea.setVisible(false);
+        cid.setBounds(400, 15, 300, 15);
+        add(cid);
+        cid.setVisible(false);
+        cidData.setBounds(400, 35, 300, 15);
+        add(cidData);
+        cidData.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
@@ -466,7 +475,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
         secInfo.setVisible(false);
-
+        cid.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -478,6 +487,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addToJTableDataStudent();
         System.out.println("bbbbbbbbbbbbbbbbbbbb");
         //setVisible(false);
+        editStudent.setVisible(true);
         students.setVisible(true);
         schedule.setVisible(true);
         studentArea.setVisible(true);
@@ -510,13 +520,14 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseArea.setVisible(false);
         course.setVisible(false);
         courseName.setVisible(false);
+        editCourse.setVisible(false);
         ACA.setVisible(false);
         KAP.setVisible(false);
         AP.setVisible(false);
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
         secInfo.setVisible(false);
-
+        cid.setVisible(false);
     }
 
     public void studentAdder(){
@@ -616,13 +627,17 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
         secInfo.setVisible(false);
+        cid.setVisible(false);
     }
-    public void courseEditor(){}
+    public void courseEditor(){
+
+    }
 
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
         sectionArea.setVisible(true);
         secInfo.setVisible(true);
+        cid.setVisible(true);
         openSection();
         //addToJTableDataSections();
 
@@ -1108,7 +1123,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(teacherFirstName.getText().equals("") || teacherLastName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Please complete all fields!");
+            JOptionPane.showMessageDialog(this, "Please complete all fields! B");
             return ;
         }
         Teachers t = new Teachers(teacherFirstName.getText(), teacherLastName.getText());
@@ -1122,7 +1137,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(studentFirstName.getText().equals("") || studentLastName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Please complete all fields!");
+            System.out.println(studentFirstName.getText() + ", " + studentLastName.getText());
+            JOptionPane.showMessageDialog(this, "Please complete all fields! C");
             return ;
         }
         Students t = new Students(studentFirstName.getText(), studentLastName.getText());
@@ -1147,12 +1163,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Please complete all fields!");
+            JOptionPane.showMessageDialog(this, "Please complete all fields! D");
             return ;
         }
         if(courseName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Please complete all fields!");
+            JOptionPane.showMessageDialog(this, "Please complete all fields! E");
             return ;
         }
         Courses t = new Courses(courseName.getText(), a);
@@ -1219,7 +1235,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(teachersList.getSelectionModel().isSelectionEmpty())
         {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            JOptionPane.showMessageDialog(this, "Please select one row to delete. E");
             return;
         }
         DefaultTableModel tableMod = (DefaultTableModel) teachersList.getModel();
@@ -1248,7 +1264,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(studentList.getSelectionModel().isSelectionEmpty())
         {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            JOptionPane.showMessageDialog(this, "Please select one row to delete. F");
             return;
         }
         DefaultTableModel tableMod = (DefaultTableModel) studentList.getModel();
@@ -1272,7 +1288,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(courseList.getSelectionModel().isSelectionEmpty())
         {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            JOptionPane.showMessageDialog(this, "Please select one row to delete. G");
             return;
         }
         DefaultTableModel tableMod = (DefaultTableModel) courseList.getModel();
@@ -1296,7 +1312,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(sectionList.getSelectionModel().isSelectionEmpty())
         {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            JOptionPane.showMessageDialog(this, "Please select one row to delete. H");
             return;
         }
         DefaultTableModel tableMod = (DefaultTableModel) sectionList.getModel();
@@ -1318,7 +1334,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(enrollmentList.getSelectionModel().isSelectionEmpty())
         {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete.");
+            JOptionPane.showMessageDialog(this, "Please select one row to delete. I");
             return;
         }
         DefaultTableModel tableMod = (DefaultTableModel) enrollmentList.getModel();
@@ -1338,7 +1354,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void updateSelectionStudent()
     {
         addStudent.setVisible(false);
-        editTeacher.setVisible(true);
+        editStudent.setVisible(true);
         DefaultTableModel tbModel = (DefaultTableModel)  studentList.getModel();
         if(studentList.getSelectedRowCount() == 1 )
         {
@@ -1372,7 +1388,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     {
         if(teacherFirstName.getText().equals("") || teacherLastName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Both fields needs to be completed!");
+            JOptionPane.showMessageDialog(this, "Both fields needs to be completed! J");
             return ;
         }
         DefaultTableModel tbmd = (DefaultTableModel) teachersList.getModel();
@@ -1382,10 +1398,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            String state = "UPDATE teacher SET first_name=" +teacherFirstName.getText()+" WHERE teacher_id=" + id + ";";
+            String state = "UPDATE teacher SET first_name='" +teacherFirstName.getText()+"' WHERE teacher_id=" + id + ";";
             Statement te = con.createStatement();
             boolean value = te.execute(state);
-            state = "UPDATE teacher SET last_name=" +teacherLastName.getText()+" WHERE teacher_id=" + id + ";";
+            state = "UPDATE teacher SET last_name='" +teacherLastName.getText()+"' WHERE teacher_id=" + id + ";";
             value = te.execute(state);
 
         } catch (SQLException e) {
@@ -1397,30 +1413,31 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void editSelectionStudent()
     {
-        if(teacherFirstName.getText().equals("") || teacherLastName.getText().equals(""))
+        if(studentFirstName.getText().equals("") || studentLastName.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Both fields needs to be completed!");
+            System.out.println(studentFirstName.getText() + ", " + studentLastName.getText());
+            JOptionPane.showMessageDialog(this, "Please complete all fields! A");
             return ;
         }
-        DefaultTableModel tbmd = (DefaultTableModel) teachersList.getModel();
-        int row = teachersList.getSelectedRow();
+        DefaultTableModel tbmd = (DefaultTableModel) studentList.getModel();
+        int row = studentList.getSelectedRow();
         int id = Integer.parseInt(tbmd.getValueAt(row,0).toString());
-        Teachers t = new Teachers(id, teacherFirstName.getText(), teacherLastName.getText());
+        Students t = new Students(id, studentFirstName.getText(), studentLastName.getText());
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            String state = "UPDATE teacher SET first_name=" +teacherFirstName.getText()+" WHERE teacher_id=" + id + ";";
+            String state = "UPDATE student SET first_name='" +studentFirstName.getText()+"' WHERE student_id=" + id + ";";
             Statement te = con.createStatement();
             boolean value = te.execute(state);
-            state = "UPDATE teacher SET last_name=" +teacherLastName.getText()+" WHERE teacher_id=" + id + ";";
+            state = "UPDATE student SET last_name='" +studentLastName.getText()+"' WHERE student_id=" + id + ";";
             value = te.execute(state);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        addToJTableDataTeachers();
-        teacherFirstName.setText("");
-        teacherLastName.setText("");
+        addToJTableDataStudent();
+        studentFirstName.setText("");
+        studentLastName.setText("");
     }
     public void editSelectionCourse()
     {
