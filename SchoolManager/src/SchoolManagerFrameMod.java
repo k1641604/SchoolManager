@@ -344,14 +344,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
 
 
-        try {
-            readFile();
-        }
-        catch (Exception b){
-            b.printStackTrace();
-            System.out.println("Helo");
-        }
-
         setVisible(true);
     }
 
@@ -596,16 +588,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
     }
-
-    public void courseAdder(){
-        if (courseName.getText().isEmpty() || (rank != 0 && rank != 1 && rank != 2)){
-            int value = JOptionPane.showConfirmDialog(null, "Courses require a name and a proper rank (ie. ACA, KAP, AP)");
-        }
-        else {
-            System.out.println("Course name is "+courseName.getText()+" with a rank of "+rank);
-        }
-    }
-    public void courseRemover(){}
     public void courseEditor(){}
 
     public void sectionsTable(){
@@ -618,7 +600,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         //all JTextFields should be reset if another menu is opened
         //More things need to be added as more tables, labels, textfields, etc are added to the program
         teachers.setVisible(false);
-        teachersList.setVisible(false);
         teacherArea.setVisible(false);
         secTab.setVisible(false);
         sectionsTab.setVisible(false);
@@ -631,7 +612,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editTeacher.setVisible(false);
         students.setVisible(false);
         schedule.setVisible(false);
-        studentList.setVisible(false);
         nuCourses.setVisible(false);
         tFirst.setVisible(false);
         studentFirstName.setVisible(false);
@@ -656,11 +636,15 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
 
     public void helpTable(){
-        //no idea what this does
+        JOptionPane.showMessageDialog(this, "Creator: Maximo San Juan+, Fanghua liang \n Version: 0.0.1");
     }
 
-    public void exportDataDoer(){}
-    public void importDataDoer(){}
+    public void exportDataDoer(){
+        fileSave();
+    }
+    public void importDataDoer(){
+        readFile();
+    }
     public void purger(){}
     public void release(){
         this.dispose();
@@ -681,7 +665,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String id = String.valueOf(rst.getInt("teacher_id"));
                 String first = rst.getString("first_name");
                 String last = rst.getString("last_name");
-                System.out.println();
                 String[] toAdd = {id, first, last};
                 tableMod.addRow(toAdd);
                 repaint();
@@ -809,7 +792,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             }
             Statement te = con.createStatement();
             boolean value = te.execute(state);
-            System.out.println("executed statement");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -831,7 +813,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             }
             Statement stu = con.createStatement();
             boolean value = stu.execute(state);
-            System.out.println("executed statement");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -888,7 +869,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String[] parts = from.nextLine().split(",");
                 Teachers c;
                 c = new Teachers(Integer.parseInt(parts[0]), parts[1], parts[2]);
-                System.out.println(c.toStore());
                 teacherInfo.add(c);
                 addToSqlTeacher(c, true);
                 addToJTableDataTeachers();
@@ -978,7 +958,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     String id = String.valueOf(rs.getInt("teacher_id"));
                     String first = rs.getString("first_name");
                     String last = rs.getString("last_name");
-                    System.out.println(id +"," + first + "," + last);
                     printWriter.println(id +"," + first + "," + last);
                 }
             } catch (SQLException e) {
@@ -1102,7 +1081,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             return ;
         }
         Teachers t = new Teachers(teacherFirstName.getText(), teacherLastName.getText());
-        System.out.println(t);
         teacherInfo.add(t);
         addToSqlTeacher(t, false);
         addToJTableDataTeachers();
@@ -1172,8 +1150,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        System.out.println("trying to save file");
-        fileSave();
+        //works
+        //fileSave();
         try {
             this.con.close();
         } catch (SQLException ex) {
