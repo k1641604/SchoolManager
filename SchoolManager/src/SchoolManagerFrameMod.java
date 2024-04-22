@@ -131,6 +131,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {updateSelectionTeacher();}
             else
             {return ;}});
+
+
+
+
         teacherArea.setBounds(20, 30, 300, 500);
         tableModelTeacher.addColumn("Teacher id");
         tableModelTeacher.addColumn("First Name");
@@ -307,11 +311,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         add(editCourse);
         editCourse.addActionListener(e -> {courseEditor();});
         editCourse.setVisible(false);
-
+        tableModelSection.addColumn("Section id");
+        tableModelSection.addColumn("Course id");
+        tableModelSection.addColumn("Teacher id");
             sectionList.setBounds(20, 20, 300, 500);
             sectionList.setBorder(oLine);
             add(sectionList);
             sectionList.setVisible(false);
+            sectionArea = new JScrollPane(sectionList);
+            sectionArea.setBounds(20, 30, 300, 500);
+        sectionArea.setBorder(oLine);
+        add(sectionArea);
+        //available.setBounds();
+        sectionArea.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
@@ -344,13 +356,13 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
 
 
-        try {
+        /*try {
             readFile();
         }
         catch (Exception b){
             b.printStackTrace();
             System.out.println("Helo");
-        }
+        }*/
 
         setVisible(true);
     }
@@ -610,6 +622,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
+        sectionArea.setVisible(true);
         openSection();
         //addToJTableDataSections();
 
