@@ -631,7 +631,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         //all JTextFields should be reset if another menu is opened
         //More things need to be added as more tables, labels, textfields, etc are added to the program
         teachers.setVisible(false);
-        teachersList.setVisible(false);
         teacherArea.setVisible(false);
         secTab.setVisible(false);
         sectionsTab.setVisible(false);
@@ -644,7 +643,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editTeacher.setVisible(false);
         students.setVisible(false);
         schedule.setVisible(false);
-        studentList.setVisible(false);
         nuCourses.setVisible(false);
         tFirst.setVisible(false);
         studentFirstName.setVisible(false);
@@ -672,8 +670,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         //no idea what this does
     }
 
-    public void exportDataDoer(){}
-    public void importDataDoer(){}
+    public void exportDataDoer(){
+        fileSave();
+    }
+    public void importDataDoer(){
+        readFile();
+    }
     public void purger(){}
     public void release(){
         this.dispose();
