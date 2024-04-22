@@ -81,6 +81,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
 
     JTable courseBox = new JTable();
+    JLabel secInfo = new JLabel("Course id");
+    JLabel tid = new JLabel("Teacher id");
     JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
 
@@ -131,6 +133,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {updateSelectionTeacher();}
             else
             {return ;}});
+
+
+
+
         teacherArea.setBounds(20, 30, 300, 500);
         tableModelTeacher.addColumn("Teacher id");
         tableModelTeacher.addColumn("First Name");
@@ -307,11 +313,22 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         add(editCourse);
         editCourse.addActionListener(e -> {courseEditor();});
         editCourse.setVisible(false);
-
+        tableModelSection.addColumn("Section id");
+        tableModelSection.addColumn("Course id");
+        tableModelSection.addColumn("Teacher id");
             sectionList.setBounds(20, 20, 300, 500);
             sectionList.setBorder(oLine);
             add(sectionList);
             sectionList.setVisible(false);
+            sectionArea = new JScrollPane(sectionList);
+            sectionArea.setBounds(20, 30, 300, 500);
+        sectionArea.setBorder(oLine);
+        add(sectionArea);
+        secInfo.setBounds(20, 15, 300, 15);
+        add(secInfo);
+        secInfo.setVisible(false);
+        //available.setBounds();
+        sectionArea.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
@@ -344,6 +361,13 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
 
 
+        /*try {
+            readFile();
+        }
+        catch (Exception b){
+            b.printStackTrace();
+            System.out.println("Helo");
+        }*/
         setVisible(true);
     }
 
@@ -441,6 +465,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         AP.setVisible(false);
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
+        secInfo.setVisible(false);
+
     }
 
     public void teacherAdder(){}
@@ -489,6 +515,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         AP.setVisible(false);
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
+        secInfo.setVisible(false);
+
     }
 
     public void studentAdder(){
@@ -587,11 +615,14 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         studentArea.setVisible(false);
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
+        secInfo.setVisible(false);
     }
     public void courseEditor(){}
 
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
+        sectionArea.setVisible(true);
+        secInfo.setVisible(true);
         openSection();
         //addToJTableDataSections();
 
