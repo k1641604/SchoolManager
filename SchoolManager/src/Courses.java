@@ -41,6 +41,24 @@ public class Courses implements Comparable {
     public void setType(int type) {
         this.type = type;
     }
+    @Override
+    public String toString()
+    {
+        String t;
+        if(this.type == 0)
+        {
+            t = "ACA";
+        }
+        else if(this.type == 1)
+        {
+            t = "KAP";
+        }
+        else
+        {
+            t = "AP";
+        }
+        return this.courseID + "  " + this.title + "-" + t;
+    }
 
     @Override
     public int compareTo(Object o) {

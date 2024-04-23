@@ -1,4 +1,4 @@
-public class Teachers implements Comparable{
+public class Teachers implements Comparable<Teachers>{
     private int teacherID;
     private String firstName;
     private String lastName;
@@ -44,10 +44,10 @@ public class Teachers implements Comparable{
     @Override
     public String toString()
     {
-        return this.firstName + " " + this.lastName + " Teacher id: " + this.teacherID;
+        return "First Name:" + this.firstName + " Last Name:" + this.lastName + " Teacher id: " + this.teacherID;
     }
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Teachers t) {
         return 0;
     }
 }

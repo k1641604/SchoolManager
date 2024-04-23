@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -82,7 +81,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     JTable courseBox = new JTable();
     JLabel secInfo = new JLabel("Section Information");
-    JLabel cid = new JLabel("Course id");
+    JLabel availableCourseLabel = new JLabel("Available courses");
     JLabel cidData = new JLabel("");
     JLabel tid = new JLabel("Teacher id");
     JLabel tidData = new JLabel("");
@@ -332,9 +331,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(false);
         //available.setBounds();
         sectionArea.setVisible(false);
-        cid.setBounds(400, 15, 300, 15);
-        add(cid);
-        cid.setVisible(false);
+        availableCourseLabel.setBounds(400, 15, 300, 15);
+        add(availableCourseLabel);
+        availableCourseLabel.setVisible(false);
+        available.setBounds(400, 35, 300,25);
+        add(available);
+        available.setVisible(false);
         cidData.setBounds(400, 35, 300, 15);
         add(cidData);
         cidData.setVisible(false);
@@ -342,16 +344,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
             Statement n = connect.createStatement();
-            String s = "DROP TABLE IF EXISTS enrollment;";
-            n.execute(s);
-            s = "DROP TABLE IF EXISTS section;";
-            n.execute(s);
-            s = "DROP TABLE IF EXISTS teacher;";
-            n.execute(s);
-            s = "DROP TABLE IF EXISTS student;";
-            n.execute(s);
-            s = "DROP TABLE IF EXISTS course;";
-            n.execute(s);
+            String s;
             s = "CREATE TABLE IF NOT EXISTS teacher (teacher_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(teacher_id));";
             n.execute(s);
             s = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(student_id));";
@@ -362,12 +355,20 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             n.execute(s);
             s = "CREATE TABLE IF NOT EXISTS enrollment (section_id INTEGER Not Null, student_id INTEGER Not Null , PRIMARY KEY(section_id,student_id), FOREIGN KEY(section_id) references section(section_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(student_id) references student(student_id) ON DELETE CASCADE ON UPDATE CASCADE);";
             n.execute(s);
-            s = "INSERT INTO teacher (teacher_id, first_name, last_name) VALUES (-1, 'Teacher', 'No');";
-            n.execute(s);
+            ResultSet rs = n.executeQuery("SELECT first_name FROM teacher WHERE teacher_id=-1;");
+            if (!rs.isBeforeFirst() ) {
+                s = "INSERT INTO teacher (teacher_id, first_name, last_name) VALUES (-1, 'Teacher', 'No');";
+                n.execute(s);
+            }
+            addToJTableDataTeachers();
+            addToJTableDataStudent();
+            addToJTableDataCourses();
+            addToJTableDataSections();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        refreshCourseSelection();
 
 
         /*try {
@@ -475,7 +476,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
         secInfo.setVisible(false);
-        cid.setVisible(false);
+        availableCourseLabel.setVisible(false);
+        available.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -527,7 +529,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
         secInfo.setVisible(false);
-        cid.setVisible(false);
+        availableCourseLabel.setVisible(false);
+        available.setVisible(false);
     }
 
     public void studentAdder(){
@@ -627,7 +630,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
         secInfo.setVisible(false);
-        cid.setVisible(false);
+        availableCourseLabel.setVisible(false);
+        available.setVisible(false);
     }
     public void courseEditor(){
 
@@ -637,10 +641,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         System.out.println("dddddddddddddddddddd");
         sectionArea.setVisible(true);
         secInfo.setVisible(true);
-        cid.setVisible(true);
+        availableCourseLabel.setVisible(true);
+        available.setVisible(true);
+        refreshCourseSelection();
         openSection();
         //addToJTableDataSections();
-
     }
     public void openSection(){
         //all JTextFields should be reset if another menu is opened
@@ -689,9 +694,47 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         fileSave();
     }
     public void importDataDoer(){
+        purger();
         readFile();
     }
-    public void purger(){}
+    public void purger(){
+        try
+        {
+            Connection connectForPurge = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement np = connectForPurge.createStatement();
+            String sp = "DROP TABLE IF EXISTS enrollment;";
+            np.execute(sp);
+            sp = "DROP TABLE IF EXISTS section;";
+            np.execute(sp);
+            sp = "DROP TABLE IF EXISTS teacher;";
+            np.execute(sp);
+            sp = "DROP TABLE IF EXISTS student;";
+            np.execute(sp);
+            sp = "DROP TABLE IF EXISTS course;";
+            np.execute(sp);
+            sp = "CREATE TABLE IF NOT EXISTS teacher (teacher_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(teacher_id));";
+            np.execute(sp);
+            sp = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(student_id));";
+            np.execute(sp);
+            sp = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, course_name Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
+            np.execute(sp);
+            sp = "CREATE TABLE IF NOT EXISTS section (section_id INTEGER Not Null AUTO_INCREMENT, course_id INTEGER Not Null,  teacher_id INTEGER Not Null, PRIMARY KEY(section_id), FOREIGN KEY(course_id) references course(course_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(teacher_id) references teacher(teacher_id) ON DELETE CASCADE ON UPDATE CASCADE);";
+            np.execute(sp);
+            sp = "CREATE TABLE IF NOT EXISTS enrollment (section_id INTEGER Not Null, student_id INTEGER Not Null , PRIMARY KEY(section_id,student_id), FOREIGN KEY(section_id) references section(section_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(student_id) references student(student_id) ON DELETE CASCADE ON UPDATE CASCADE);";
+            np.execute(sp);
+            sp = "INSERT INTO teacher (teacher_id, first_name, last_name) VALUES (-1, 'Teacher', 'No');";
+            np.execute(sp);
+            addToJTableDataTeachers();
+            addToJTableDataStudent();
+            addToJTableDataCourses();
+            addToJTableDataSections();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
     public void release(){
         this.dispose();
     }
@@ -781,7 +824,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void addToJTableDataSections()
     {
         //referenced code from Knowledge to Share's YouTube video;
-        String state = "select * from sections";
+        String state = "select * from section";
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
@@ -1198,7 +1241,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     @Override
     public void windowClosing(WindowEvent e) {
         //works
-        //fileSave();
         try {
             this.con.close();
         } catch (SQLException ex) {
@@ -1446,6 +1488,48 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void editSelectionSection()
     {
 
+    }
+    public void refreshCourseSelection()
+    {
+        try {
+            String state = "select * from course";
+            Connection cons= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jcs = cons.createStatement();
+            ResultSet rscs = jcs.executeQuery(state);
+            available.removeAllItems();
+            while(rscs.next())
+            {
+                int id = rscs.getInt("course_id");
+                String title = rscs.getString("course_name");
+                int t = rscs.getInt("type");
+                Courses cs = new Courses(id, title, t);
+                available.addItem(cs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void refreshTeacherSelection()
+    {
+        try {
+            String state = "select * from teacher";
+            Connection cont= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jct = cont.createStatement();
+            ResultSet rsct = jct.executeQuery(state);
+            teacherbox.removeAllItems();
+            while(rsct.next())
+            {
+                int id = rsct.getInt("teacher_id");
+                String title = rsct.getString("first_name");
+                String t = rsct.getString("last_name");
+                Teachers tt = new Teachers(id, title, t);
+                teacherbox.addItem(tt);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
