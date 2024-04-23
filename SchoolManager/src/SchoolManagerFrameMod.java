@@ -39,8 +39,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JScrollPane courseArea;
     JLabel course = new JLabel("Course Name");
     JTextField courseName = new JTextField("");
-        JTable sectionList = new JTable(tableModelSection);
-        JScrollPane sectionArea;
         JLabel secTab = new JLabel("Sections Taught");
         JTable sectionsTab = new JTable();
     JTable enrollmentList;
@@ -55,6 +53,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         JList studentStuff = new JList();
         JTextField studentFirstName = new JTextField();
         JTextField studentLastName = new JTextField();
+
 
     JButton deleteTable;
 
@@ -82,7 +81,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     JTable courseBox = new JTable();
     JComboBox<Courses> available = new JComboBox<Courses>();
-    JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
 
     ArrayList<Students> studentInfo = new ArrayList<Students>();
     ArrayList<Teachers> teacherInfo = new ArrayList<Teachers>();
@@ -96,6 +94,15 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     Statement s;
 
     int rank;
+
+    JLabel sections = new JLabel("Section Info");
+    JTable sectionList = new JTable(tableModelSection);
+    JScrollPane sectionArea;
+
+    JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
+    JButton addTea = new JButton("Add Teacher to Section");
+    JComboBox<Students> studentbox = new JComboBox<Students>();
+    JButton addStu = new JButton("Enroll Student in Course");
 
     public SchoolManagerFrameMod(Connection c) {
                 super("School Manager");
@@ -313,10 +320,17 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editCourse.addActionListener(e -> {courseEditor();});
         editCourse.setVisible(false);
 
-            sectionList.setBounds(20, 20, 300, 500);
-            sectionList.setBorder(oLine);
-            add(sectionList);
-            sectionList.setVisible(false);
+            sectionArea = new JScrollPane(sectionList);
+            sectionArea.setBounds(20, 30, 300, 500);
+            sectionArea.setBorder(oLine);
+            tableModelSection.addColumn("Section ID");
+            tableModelSection.addColumn("Course Name");
+            add(sectionArea);
+            sectionArea.setVisible(false);
+
+            sections.setBounds(20, 15, 300, 15);
+            add(sections);
+            sections.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/school_manager_p3","root","password");
@@ -456,6 +470,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         removeCourse.setVisible(false);
         editCourse.setVisible(false);
         available.setVisible(false);
+        sectionArea.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -506,6 +521,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addCourse.setVisible(false);
         removeCourse.setVisible(false);
         editCourse.setVisible(false);
+        sectionArea.setVisible(false);
     }
 
     public void studentAdder(){
@@ -605,6 +621,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseBox.setVisible(false);
         nuCourses.setVisible(false);
         available.setVisible(false);
+        sectionArea.setVisible(false);
     }
 
     public void courseAdder(){
@@ -621,6 +638,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void sectionsTable(){
         System.out.println("dddddddddddddddddddd");
         openSection();
+        sectionArea.setVisible(true);
         //addToJTableDataSections();
 
     }
