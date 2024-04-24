@@ -95,6 +95,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     ArrayList<Sections> sectionInfo = new ArrayList<Sections>();
     ArrayList<Enrollment> enrollmentInfo = new ArrayList<Enrollment>();
 
+    JButton add2Sec = new JButton("Add Student");
+    JButton remFmSec = new JButton("Remove Student");
+    JButton createSec = new JButton("Create Section");
+    JButton removeSec = new JButton("Remove Section");
+    JButton editSec = new JButton("Save to Section");
+
 
     Connection con;
 
@@ -347,6 +353,26 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         studentBox.setBounds(400, 500, 300, 25);
         add(studentBox);
         studentBox.setVisible(false);
+        add2Sec.setBounds(375, 550, 150,50);
+        add2Sec.addActionListener(e -> {});
+        add(add2Sec);
+        add2Sec.setVisible(false);
+        remFmSec.setBounds(575, 550, 150, 50);
+        remFmSec.addActionListener(e -> {});
+        add(remFmSec);
+        remFmSec.setVisible(false);
+        createSec.setBounds(475, 100, 150, 25);
+        createSec.addActionListener(e -> {addSectionButton();});
+        add(createSec);
+        createSec.setVisible(false);
+        removeSec.setBounds(400, 100, 150, 25);
+        removeSec.addActionListener(e -> {removeItemSection();});
+        add(removeSec);
+        removeSec.setVisible(false);
+        editSec.setBounds(550, 100, 150, 25);
+        editSec.addActionListener(e -> {editSelectionSection();});
+        add(editSec);
+        editSec.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/school_manager_p3","root","password");
@@ -488,6 +514,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         available.setVisible(false);
         teacherbox.setVisible(false);
         studentBox.setVisible(false);
+        add2Sec.setVisible(false);
+        remFmSec.setVisible(false);
+        createSec.setVisible(false);
+        removeSec.setVisible(false);
+        editSec.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -543,6 +574,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         available.setVisible(false);
         teacherbox.setVisible(false);
         studentBox.setVisible(false);
+        add2Sec.setVisible(false);
+        remFmSec.setVisible(false);
+        createSec.setVisible(false);
+        removeSec.setVisible(false);
+        editSec.setVisible(false);
     }
 
     public void studentAdder(){
@@ -646,6 +682,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         available.setVisible(false);
         teacherbox.setVisible(false);
         studentBox.setVisible(false);
+        add2Sec.setVisible(false);
+        remFmSec.setVisible(false);
+        createSec.setVisible(false);
+        removeSec.setVisible(false);
+        editSec.setVisible(false);
     }
     public void courseEditor(){
 
@@ -659,6 +700,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         available.setVisible(true);
         teacherbox.setVisible(true);
         studentBox.setVisible(true);
+        add2Sec.setVisible(true);
+        remFmSec.setVisible(true);
+        createSec.setVisible(true);
+        removeSec.setVisible(false);
+        editSec.setVisible(false);
         refreshCourseSelection();
         refreshTeacherSelection();
         refreshStudentSelection();
@@ -705,7 +751,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
 
     public void helpTable(){
-        JOptionPane.showMessageDialog(this, "Creator: Maximo San Juan+, Fanghua liang \n Version: 0.0.1");
+        JOptionPane.showMessageDialog(this, "Creator: Maximo San Juan, Fanghua liang \n Version: 0.0.1");
     }
 
     public void exportDataDoer(){
@@ -1239,6 +1285,15 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseName.setText("");
         bg.clearSelection();
     }
+
+    public void addSectionButton(){
+        Teachers t = (Teachers) teacherbox.getSelectedItem();
+        Courses c = (Courses) available.getSelectedItem();
+        Sections s =  new Sections(c.getCourseID(), t.getTeacherID());
+        sectionInfo.add(s);
+        addToSqlSection(s, false);
+        addToJTableDataSections();
+    }
     /*public void addEnrollmentButton()
         {
             if(studentFirstName.getText().equals("") || studentLastName.getText().equals(""))
@@ -1390,15 +1445,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             throw new RuntimeException(e);
         }
     }
-    public void removeItemEnrollment()
-    {
-        if(enrollmentList.getSelectionModel().isSelectionEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Please select one row to delete. I");
-            return;
-        }
-        DefaultTableModel tableMod = (DefaultTableModel) enrollmentList.getModel();
-    }
+
     public void updateSelectionTeacher()
     {
         addTeacher.setVisible(false);
