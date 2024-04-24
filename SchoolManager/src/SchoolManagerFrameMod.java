@@ -21,6 +21,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     DefaultTableModel tableModelStudent = new DefaultTableModel();
     DefaultTableModel tableModelSection = new DefaultTableModel();
     DefaultTableModel tableModelCourse = new DefaultTableModel();
+    DefaultTableModel tableModelRoster = new DefaultTableModel();
     JMenuBar menubar = new JMenuBar();
     JMenu View = new JMenu("View");
     JMenu Help = new JMenu("Help");
@@ -28,6 +29,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         JLabel teachers = new JLabel("Teacher Information");
         JTable teachersList = new JTable(tableModelTeacher);
         JScrollPane teacherArea;
+
+    JTable Roster = new JTable(tableModelRoster);
+    JScrollPane rosterArea;
 
         JLabel tFirst = new JLabel("First Name");
         JTextField teacherFirstName = new JTextField();
@@ -136,8 +140,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             else
             {return ;}});
 
-
-
+        rosterArea = new JScrollPane(Roster);
+        tableModelRoster.addColumn("Last Name");
+        tableModelRoster.addColumn("First Name");
+        tableModelRoster.addColumn("Student id");
 
         teacherArea.setBounds(20, 30, 300, 500);
         tableModelTeacher.addColumn("Teacher id");
