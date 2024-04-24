@@ -81,7 +81,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
     JTable courseBox = new JTable();
     JLabel secInfo = new JLabel("Section Information");
-    JLabel availableCourseLabel = new JLabel("Available courses");
+    JLabel availableCourseLabel = new JLabel("Available courses and teachers");
     JLabel cidData = new JLabel("");
     JLabel tid = new JLabel("Teacher id");
     JLabel tidData = new JLabel("");
@@ -313,7 +313,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
         editCourse.setBounds(400, 220, 300, 30);
         add(editCourse);
-        editCourse.addActionListener(e -> {courseEditor();});
+        editCourse.addActionListener(e -> {editSelectionCourse();});
         editCourse.setVisible(false);
         tableModelSection.addColumn("Section id");
         tableModelSection.addColumn("Course id");
@@ -337,6 +337,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         available.setBounds(400, 35, 300,25);
         add(available);
         available.setVisible(false);
+        teacherbox.setBounds(400, 65, 300,25);
+        add(teacherbox);
+        teacherbox.setVisible(false);
         cidData.setBounds(400, 35, 300, 15);
         add(cidData);
         cidData.setVisible(false);
@@ -369,6 +372,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             e.printStackTrace();
         }
         refreshCourseSelection();
+        refreshTeacherSelection();
 
 
         /*try {
@@ -478,6 +482,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(false);
         availableCourseLabel.setVisible(false);
         available.setVisible(false);
+        teacherbox.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -531,6 +536,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(false);
         availableCourseLabel.setVisible(false);
         available.setVisible(false);
+        teacherbox.setVisible(false);
     }
 
     public void studentAdder(){
@@ -632,6 +638,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(false);
         availableCourseLabel.setVisible(false);
         available.setVisible(false);
+        teacherbox.setVisible(false);
     }
     public void courseEditor(){
 
@@ -643,7 +650,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         secInfo.setVisible(true);
         availableCourseLabel.setVisible(true);
         available.setVisible(true);
+        teacherbox.setVisible(true);
         refreshCourseSelection();
+        refreshTeacherSelection();
         openSection();
         //addToJTableDataSections();
     }
@@ -1483,7 +1492,43 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void editSelectionCourse()
     {
+        if(courseName.getText().equals("") || (!ACA.isSelected() && !KAP.isSelected() && !AP.isSelected()))
+        {
+            JOptionPane.showMessageDialog(this, "Please complete all fields! A");
+            return ;
+        }
+        DefaultTableModel tbmd = (DefaultTableModel) courseList.getModel();
+        int row = courseList.getSelectedRow();
+        int id = Integer.parseInt(tbmd.getValueAt(row,0).toString());
+        int type;
+        if(ACA.isSelected())
+        {
+            type = 0;
+        }
+        else if (KAP.isSelected())
+        {
+            type = 1;
+        }
+        else
+        {
+            type = 2;
+        }
+        Courses t = new Courses(id, courseName.getText(), type);
+        try {
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            String state = "UPDATE course SET course_name='" +courseName.getText()+"' WHERE course_id=" + id + ";";
+            Statement te = con.createStatement();
+            boolean value = te.execute(state);
+            state = "UPDATE course SET type=" +type+" WHERE course_id=" + id + ";";
+            value = te.execute(state);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        addToJTableDataCourses();
+        courseName.setText("");
+        bg.clearSelection();
     }
     public void editSelectionSection()
     {
