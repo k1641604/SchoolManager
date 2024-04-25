@@ -97,7 +97,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JComboBox<Courses> available = new JComboBox<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
     JComboBox<Students> studentBox = new JComboBox<Students>();
-
+    JButton add2Sec = new JButton("Add Student");
+    JButton remFmSec = new JButton("Remove Student");
     ArrayList<Students> studentInfo = new ArrayList<Students>();
     ArrayList<Teachers> teacherInfo = new ArrayList<Teachers>();
     ArrayList<Courses> courseInfo = new ArrayList<Courses>();
@@ -388,6 +389,14 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         rosterArea.setBounds(400, 250,300,200);
         add(rosterArea);
         rosterArea.setVisible(false);
+        add2Sec.setBounds(375, 550, 150,50);
+        add2Sec.addActionListener(e -> {});
+        add(add2Sec);
+        add2Sec.setVisible(false);
+        remFmSec.setBounds(575, 550, 150, 50);
+        remFmSec.addActionListener(e -> {});
+        add(remFmSec);
+        remFmSec.setVisible(false);
         try {
             Connection connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
@@ -534,6 +543,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         removeSection.setVisible(false);
         addSection.setVisible(false);
         courseBoxArea.setVisible(false);
+        remFmSec.setVisible(false);
+        add2Sec.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -594,6 +605,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editSection.setVisible(false);
         removeSection.setVisible(false);
         addSection.setVisible(false);
+        remFmSec.setVisible(false);
+        add2Sec.setVisible(false);
     }
 
     public void studentAdder(){
@@ -702,6 +715,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         removeSection.setVisible(false);
         addSection.setVisible(false);
         courseBoxArea.setVisible(false);
+        remFmSec.setVisible(false);
+        add2Sec.setVisible(false);
     }
     public void courseEditor(){
 
@@ -719,6 +734,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addSection.setVisible(true);
         //editSection.setVisible(true);
         removeSection.setVisible(true);
+        remFmSec.setVisible(true);
+        add2Sec.setVisible(true);
         refreshCourseSelection();
         refreshTeacherSelection();
         refreshStudentSelection();
