@@ -23,6 +23,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     DefaultTableModel tableModelCourse = new DefaultTableModel();
     DefaultTableModel tableModelRoster = new DefaultTableModel();
     DefaultTableModel tableModelTaught = new DefaultTableModel();
+    DefaultTableModel tableModelSchedule = new DefaultTableModel();
     JMenuBar menubar = new JMenuBar();
     JMenu View = new JMenu("View");
     JMenu Help = new JMenu("Help");
@@ -86,7 +87,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
     JButton removeSection = new JButton("Remove Section from List");
     JButton editSection  = new JButton("Save Changes to Section Information");
-    JTable courseBox = new JTable();
+    JTable courseBox = new JTable(tableModelSchedule);
+    JScrollPane courseBoxArea;
     JLabel secInfo = new JLabel("Section Information");
     JLabel availableCourseLabel = new JLabel("Available courses and teachers");
     JLabel cidData = new JLabel("");
@@ -144,10 +146,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             else
             {return ;}});
 
-        rosterArea = new JScrollPane(Roster);
         tableModelRoster.addColumn("Last Name");
         tableModelRoster.addColumn("First Name");
         tableModelRoster.addColumn("Student id");
+        rosterArea = new JScrollPane(Roster);
 
         teacherArea.setBounds(20, 30, 300, 500);
         tableModelTeacher.addColumn("Teacher id");
@@ -156,6 +158,13 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         teacherArea.setBorder(oLine);
         add(teacherArea);
         teacherArea.setVisible(false);
+
+        tableModelSchedule.addColumn("Section id");
+        tableModelSchedule.addColumn("Course Name");
+        tableModelSchedule.addColumn("Teacher id");
+        tableModelSchedule.addColumn("Teacher FN");
+        tableModelSchedule.addColumn("Teacher LN");
+
 
             secTab.setBounds(400, 15,300, 15 );
             add(secTab);
@@ -233,10 +242,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             add(schedule);
             schedule.setVisible(false);
 
-            courseBox.setBounds(400, 30, 300, 50);
-            courseBox.setBorder(oLine);
-            add(courseBox);
-            courseBox.setVisible(false);
+            courseBoxArea = new JScrollPane(courseBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        courseBoxArea.setBounds(370, 30, 400, 50);
+        courseBoxArea.setBorder(oLine);
+            add(courseBoxArea);
+        courseBoxArea.setVisible(false);
+
 
 
             sFirst.setBounds(400, 265,130, 15);
@@ -282,7 +293,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {return ;}});
         sectionList.getSelectionModel().addListSelectionListener(e ->{
             if(!e.getValueIsAdjusting())
-            {updateSelectionSection(); System.out.println("is selecting");}
+            {updateSelectionSection();}
             else
             {return ;}});
         courseArea = new JScrollPane(courseList);
@@ -522,6 +533,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editSection.setVisible(false);
         removeSection.setVisible(false);
         addSection.setVisible(false);
+        courseBoxArea.setVisible(false);
     }
 
     public void teacherAdder(){}
@@ -544,6 +556,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         tLast.setVisible(true);
         addStudent.setVisible(true);
         removeStudent.setVisible(true);
+        courseBoxArea.setVisible(true);
         String[] columnNames = {"id", "First Name", "Last Name"};
         //studentList = new JTable(studentData, columnNames);
     }
@@ -688,6 +701,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         editSection.setVisible(false);
         removeSection.setVisible(false);
         addSection.setVisible(false);
+        courseBoxArea.setVisible(false);
     }
     public void courseEditor(){
 
@@ -747,6 +761,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         removeCourse.setVisible(false);
         editCourse.setVisible(false);
         sectionsTaughtArea.setVisible(false);
+        courseBoxArea.setVisible(false);
     }
 
 
@@ -910,26 +925,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             throw new RuntimeException(e);
         }
     }
-    public void addToJTableDataEnrollment()
-    {
-        //referenced code from Knowledge to Share's YouTube video;
-        String state = "select * from enrollment";
-        try {
-            ResultSet rs = this.s.executeQuery(state);
-            DefaultTableModel tableMod =  (DefaultTableModel) enrollmentList.getModel();
-            tableMod.setRowCount(0);
-            while(rs.next())
-            {
-                String sec = String.valueOf(rs.getInt("section_id"));
-                String stu = String.valueOf(rs.getInt("student_id"));
-                String[] toAdd = {sec, stu};
-                tableMod.addRow(toAdd);
-
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public void addToSqlTeacher(Teachers t, boolean fromFile)
     {
         try {
@@ -1011,6 +1006,19 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             e.printStackTrace();
         }
     }
+    public void addToSqlEnrollment(Enrollment en)
+    {
+        try {
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            String state;
+                state  = "INSERT INTO enrollment (section_id, student_id) VALUES (" + en.getSectionID() +", " + en.getStudentID() + ");";
+            Statement sec = this.con.createStatement();
+            boolean value = sec.execute(state);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public void readFile()
     {
         try {
@@ -1080,8 +1088,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Enrollment c;
                 c = new Enrollment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
                 enrollmentInfo.add(c);
-                //addToSqlEnrollment(c, true);
-                addToJTableDataEnrollment();
+                addToSqlEnrollment(c);
             }
             from.close();
         }
@@ -1356,6 +1363,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             rts.execute(s);
             s = "DELETE FROM teacher WHERE teacher_id=" + id +";";
             rts.execute(s);
+            s = "UPDATE section SET "+ "teacher_id=-1" +" WHERE " + "teacher_id="+ id + ";";
+            rts.execute(s);
             tableMod.removeRow(row);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1363,7 +1372,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
         teacherFirstName.setText("");
         teacherLastName.setText("");
-
+        addToJTableDataSections();
 
     }
     public void removeItemStudent()
@@ -1438,12 +1447,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void removeItemEnrollment()
     {
-        if(enrollmentList.getSelectionModel().isSelectionEmpty())
-        {
-            showMessageDialog(this, "Please select one row to delete. I");
-            return;
-        }
-        DefaultTableModel tableMod = (DefaultTableModel) enrollmentList.getModel();
     }
     public void updateSelectionTeacher()
     {
@@ -1462,6 +1465,16 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                         "jdbc:mysql://localhost:3306/schoolmanager","root","password");
                 Statement rtu = rtcu.createStatement();
                 ResultSet rs = rtu.executeQuery("SELECT section_id,course_id FROM section WHERE teacher_id=" + id +";");
+                DefaultTableModel d = (DefaultTableModel) sectionsTaughtList.getModel();
+                d.setRowCount(0);
+                while(rs.next())
+                {
+                    String sid = String.valueOf(rs.getInt("section_id"));
+                    String courseName = courseNameFromID(rs.getInt("course_id"));
+                    String[] toAdd = {sid, courseName};
+                    d.addRow(toAdd);
+                    repaint();
+                }
             }
             catch (Exception e)
             {
@@ -1652,23 +1665,25 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         int row = sectionList.getSelectedRow();
         int id = Integer.parseInt(tbmd.getValueAt(row,0).toString());
         Courses c = (Courses) available.getSelectedItem();
+        System.out.println(c);
         Teachers t = (Teachers) teacherbox.getSelectedItem();
+        System.out.println(t);
         Sections ta = new Sections(c.getCourseID(), t.getTeacherID());
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            String state = "UPDATE section SET course_id=" +c.getCourseID()+" WHERE section_id=" + id + ";";
+            String state = "UPDATE section SET course_id=" + c.getCourseID()+" WHERE section_id=" + id + ";";
             Statement te = con.createStatement();
-            boolean value = te.execute(state);
+            te.execute(state);
             state = "UPDATE section SET teacher_id=" + t.getTeacherID() +" WHERE section_id=" + id + ";";
-            value = te.execute(state);
+            te.execute(state);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        addToJTableDataCourses();
-        courseName.setText("");
-        bg.clearSelection();
+        addToJTableDataSections();
+        addSection.setVisible(true);
+        editSection.setVisible(false);
     }
     public void refreshCourseSelection()
     {
@@ -1694,7 +1709,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void refreshTeacherSelection()
     {
         try {
-            String state = "select * from teacher";
+            String state = "select * from teacher WHERE teacher_id>-1";
             Connection cont= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
             Statement jct = cont.createStatement();
@@ -1738,6 +1753,27 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             throw new RuntimeException(e);
         }
 
+    }
+    public String courseNameFromID(int cid)
+    {
+        String name = "";
+        try
+        {
+            String state = "select course_name from course where course_id=" + cid + ";";
+            Connection contc= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
+            Statement jctc = contc.createStatement();
+            ResultSet rsctc = jctc.executeQuery(state);
+            while(rsctc.next())
+            {
+                name = rsctc.getString("course_name");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return name;
     }
 }
 
