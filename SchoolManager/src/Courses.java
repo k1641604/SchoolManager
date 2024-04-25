@@ -57,7 +57,7 @@ public class Courses implements Comparable {
         {
             t = "AP";
         }
-        return this.courseID + "  " + this.title + "-" + t;
+        return this.courseID + "  " + this.title + " - " + t;
     }
 
     @Override
