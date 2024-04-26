@@ -48,6 +48,10 @@ public class Teachers implements Comparable<Teachers>{
     }
     @Override
     public int compareTo(Teachers t) {
-        return 0;
+        if(t.getTeacherID() == this.teacherID &&  t.getFirstName().equals(this.firstName) && t.getLastName().equals(this.lastName))
+        {
+            return 0;
+        }
+        return -1;
     }
 }

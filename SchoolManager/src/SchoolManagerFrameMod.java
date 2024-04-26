@@ -95,8 +95,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JLabel tid = new JLabel("Teacher id");
     JLabel tidData = new JLabel("");
     JComboBox<Courses> available = new JComboBox<Courses>();
+    ArrayList<Courses> availableList = new ArrayList<Courses>();
     JComboBox<Teachers> teacherbox = new JComboBox<Teachers>();
+    ArrayList<Teachers> teacherboxList = new ArrayList<Teachers>();
     JComboBox<Students> studentBox = new JComboBox<Students>();
+    ArrayList<Students> studentboxList = new ArrayList<Students>();
     JButton add2Sec = new JButton("Add Student");
     JButton remFmSec = new JButton("Remove Student");
     ArrayList<Students> studentInfo = new ArrayList<Students>();
@@ -244,7 +247,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             schedule.setVisible(false);
 
             courseBoxArea = new JScrollPane(courseBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        courseBoxArea.setBounds(370, 30, 400, 50);
+        courseBoxArea.setBounds(350, 30, 410, 230);
         courseBoxArea.setBorder(oLine);
             add(courseBoxArea);
         courseBoxArea.setVisible(false);
@@ -1539,13 +1542,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addSection.setVisible(false);
         editSection.setVisible(true);
         DefaultTableModel tbModel = (DefaultTableModel)  sectionList.getModel();
-        DefaultTableModel tbMod = (DefaultTableModel)  sectionList.getModel();
         if(sectionList.getSelectedRowCount() == 1 )
         {
             int row = sectionList.getSelectedRow();
-            int sid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
+            int sid = Integer.parseInt(tbModel.getValueAt(row,2).toString());
             int cid = Integer.parseInt(tbModel.getValueAt(row,1).toString());
-            int tid = Integer.parseInt(tbModel.getValueAt(row,2).toString());
+            int tid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
             int stun = 0;
             try {
                 Connection rtcu = DriverManager.getConnection(
@@ -1560,7 +1562,17 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     stu = rs.getString("last_name");
                 }
                 t = new Teachers(sid,sec,stu);
-
+                int tl = -1;
+                for(int i = 0; i < teacherboxList.size(); i++)
+                {
+                    System.out.println(teacherboxList.get(i) + " " + t);
+                    if(teacherboxList.get(i).compareTo(t) == 0)
+                    {
+                        tl = i;
+                        System.out.println(tl);
+                    }
+                }
+                teacherbox.setSelectedItem(tl);
                 Connection rtcus = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/schoolmanager","root","password");
                 Statement rtus = rtcus.createStatement();
@@ -1574,7 +1586,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 }
                 c = new Courses(sid,sec,stun);
                 available.setSelectedItem(c);
-                teacherbox.setSelectedItem(t);
+
             }
             catch (Exception e)
             {
@@ -1711,6 +1723,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             Statement jcs = cons.createStatement();
             ResultSet rscs = jcs.executeQuery(state);
             available.removeAllItems();
+            availableList.clear();
             while(rscs.next())
             {
                 int id = rscs.getInt("course_id");
@@ -1718,6 +1731,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 int t = rscs.getInt("type");
                 Courses cs = new Courses(id, title, t);
                 available.addItem(cs);
+                availableList.add(cs);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1731,6 +1745,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
             Statement jct = cont.createStatement();
             ResultSet rsct = jct.executeQuery(state);
+            teacherboxList.clear();
             teacherbox.removeAllItems();
             while(rsct.next())
             {
@@ -1739,6 +1754,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String t = rsct.getString("last_name");
                 Teachers tt = new Teachers(id, title, t);
                 teacherbox.addItem(tt);
+                teacherboxList.add(tt);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1752,17 +1768,17 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             Statement jct = cont.createStatement();
             ResultSet rsct = jct.executeQuery(state);
             studentBox.removeAllItems();
-            ArrayList<Students> a = new ArrayList<Students>();
+            studentboxList.clear();
             while(rsct.next())
             {
                 int id = rsct.getInt("student_id");
                 String title = rsct.getString("first_name");
                 String s = rsct.getString("last_name");
                 Students st = new Students(id, title, s);
-                a.add(st);
+                studentboxList.add(st);
             }
-            Collections.sort(a);
-            for (Students s : a) {
+            Collections.sort(studentboxList);
+            for (Students s : studentboxList) {
                 studentBox.addItem(s);
             }
         }
