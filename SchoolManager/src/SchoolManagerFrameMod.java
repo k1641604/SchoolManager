@@ -828,6 +828,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             addToJTableDataStudent();
             addToJTableDataCourses();
             addToJTableDataSections();
+            refreshCourseSelection();
+            refreshStudentSelection();
+            refreshTeacherSelection();
+
         }
         catch (Exception e)
         {
@@ -1541,13 +1545,17 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         Courses c = null;
         addSection.setVisible(false);
         editSection.setVisible(true);
+        rosterArea.setVisible(true);
+        addStudent.setVisible(true);
+        removeStudent.setVisible(true);
         DefaultTableModel tbModel = (DefaultTableModel)  sectionList.getModel();
         if(sectionList.getSelectedRowCount() == 1 )
         {
             int row = sectionList.getSelectedRow();
-            int sid = Integer.parseInt(tbModel.getValueAt(row,2).toString());
+            System.out.println(row);
+            int sid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
             int cid = Integer.parseInt(tbModel.getValueAt(row,1).toString());
-            int tid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
+            int tid = Integer.parseInt(tbModel.getValueAt(row,2).toString());
             int stun = 0;
             try {
                 Connection rtcu = DriverManager.getConnection(
@@ -1561,18 +1569,16 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     sec = rs.getString("first_name");
                     stu = rs.getString("last_name");
                 }
-                t = new Teachers(sid,sec,stu);
+                t = new Teachers(tid,sec,stu);
                 int tl = -1;
                 for(int i = 0; i < teacherboxList.size(); i++)
                 {
-                    System.out.println(teacherboxList.get(i) + " " + t);
                     if(teacherboxList.get(i).compareTo(t) == 0)
                     {
                         tl = i;
-                        System.out.println(tl);
+                        teacherbox.setSelectedIndex(tl);
                     }
                 }
-                teacherbox.setSelectedItem(tl);
                 Connection rtcus = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/schoolmanager","root","password");
                 Statement rtus = rtcus.createStatement();
@@ -1584,8 +1590,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     sec = rss.getString("course_name");
                     stun = rss.getInt("type");
                 }
-                c = new Courses(sid,sec,stun);
-                available.setSelectedItem(c);
+                c = new Courses(cid,sec,stun);
+                int cl = -1;
+                for(int i = 0; i < availableList.size(); i++)
+                {
+                    System.out.println(availableList.get(i) + " " + c);
+                    if(availableList.get(i).compareTo(c) == 0)
+                    {
+                        cl = i;
+                        System.out.println(cl);
+                        available.setSelectedIndex(cl);
+                    }
+                }
 
             }
             catch (Exception e)
@@ -1807,6 +1823,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             e.printStackTrace();
         }
         return name;
+    }
+    public String getStudentName()
+    {
+        String sn = "";
+        return sn;
     }
 }
 

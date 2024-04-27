@@ -1,16 +1,16 @@
-public class Courses implements Comparable {
+public class Courses implements Comparable<Courses> {
     private int courseID;
-    private String title;
+    private String courseName;
     private int type;
 
     public Courses(int courseID, String title, int type) {
         this.courseID = courseID;
-        this.title = title;
+        this.courseName = title;
         this.type = type;
     }
 
     public Courses(String title, int type) {
-        this.title = title;
+        this.courseName = title;
         this.type = type;
     }
 
@@ -19,7 +19,7 @@ public class Courses implements Comparable {
     }
 
     public String getTitle() {
-        return title;
+        return courseName;
     }
 
     public int getType() {
@@ -27,15 +27,15 @@ public class Courses implements Comparable {
     }
     public String toStore()
     {
-        return courseID + "," + title + "," + type;
+        return courseID + "," + courseName + "," + type;
     }
 
     public void setCourseID(int courseID) {
         this.courseID = courseID;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCourseName(String title) {
+        this.courseName = title;
     }
 
     public void setType(int type) {
@@ -57,11 +57,15 @@ public class Courses implements Comparable {
         {
             t = "AP";
         }
-        return this.courseID + "  " + this.title + " - " + t;
+        return this.courseID + "  " + this.courseName + " - " + t;
     }
 
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Courses t) {
+        if(t.getCourseID() == this.courseID &&  t.getType() == this.getType() && t.getTitle().equals(this.courseName))
+        {
+            return 0;
+        }
+        return -1;
     }
 }
