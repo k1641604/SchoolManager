@@ -397,7 +397,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         add(add2Sec);
         add2Sec.setVisible(false);
         remFmSec.setBounds(575, 550, 150, 50);
-        remFmSec.addActionListener(e -> {});
+        remFmSec.addActionListener(e -> {removeItemEnrollment();});
         add(remFmSec);
         remFmSec.setVisible(false);
         try {
@@ -977,6 +977,38 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             throw new RuntimeException(e);
         }
     }
+    public void addToJTableDataSchedule(int sid)
+    {
+        System.out.println("sid: " + sid);
+        ArrayList<Students> toAddStudent = new ArrayList<Students>();
+        DefaultTableModel d = (DefaultTableModel) studentList.getModel();
+        d.setRowCount(0);
+        //referenced code from Knowledge to Share's YouTube video;
+        try {
+            String state = "select student_id from enrollment where section_id=" + sid + ";";
+            Statement jsc = this.con.createStatement();
+            ResultSet rsse = jsc.executeQuery(state);
+            while(rsse.next())
+            {
+                int teach = rsse.getInt("student_id");
+                System.out.println("student id: " + teach);
+                String[] toAdd = studentNameFromID(teach);
+                Students s = new Students(Integer.parseInt(toAdd[0]), toAdd[1], toAdd[2]);
+                toAddStudent.add(s);
+                //d.addRow(toAdd);
+                //repaint();
+            }
+            Collections.sort(toAddStudent);
+            for(Students stu : toAddStudent)
+            {
+                String[] s = {stu.getLastName(), stu.getFirstName(),String.valueOf(stu.getStudentID())};
+                d.addRow(s);
+                repaint();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void addToSqlTeacher(Teachers t, boolean fromFile)
     {
         try {
@@ -1065,7 +1097,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 state  = "INSERT INTO enrollment (section_id, student_id) VALUES (" + en.getSectionID() +", " + en.getStudentID() + ");";
             Statement sec = this.con.createStatement();
             boolean value = sec.execute(state);
-        } catch (SQLException e) {
+        }
+        catch(SQLIntegrityConstraintViolationException ex)
+        {
+            return;
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -1498,6 +1535,22 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void removeItemEnrollment()
     {
+        if(Roster.getSelectionModel().isSelectionEmpty())
+        {
+            showMessageDialog(this, "Please select one row to delete. H");
+            return;
+        }
+        DefaultTableModel tableMod = (DefaultTableModel) Roster.getModel();
+        int row = Roster.getSelectedRow();
+        int stuid = Integer.parseInt(tableMod.getValueAt(row,2).toString());
+        try {
+            Statement rtssss = this.con.createStatement();
+            String s = "DELETE FROM enrollment WHERE student_id=" + stuid +";";
+            rtssss.execute(s);
+            tableMod.removeRow(row);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void updateSelectionTeacher()
     {
@@ -1883,14 +1936,14 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void test()
     {
-        String[] t = studentNameFromID(5);
-        if(t != null)
-        {
-            for(String s : t)
-            {
-                System.out.println(s);
-            }
-        }
+        Students stu = (Students) studentBox.getSelectedItem();
+        int stuid = stu.getStudentID();
+        DefaultTableModel d = (DefaultTableModel) sectionList.getModel();
+        int row = sectionList.getSelectedRow();
+        int secid = Integer.parseInt(d.getValueAt(row,0).toString());
+        Enrollment e = new Enrollment(secid, stuid);
+        addToSqlEnrollment(e);
+        addToJTableDataRoster(secid);
     }
 }
 
