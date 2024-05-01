@@ -982,7 +982,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         System.out.println("sid: " + sid);
         ArrayList<Students> toAddStudent = new ArrayList<Students>();
         DefaultTableModel d = (DefaultTableModel) studentList.getModel();
-        d.setRowCount(0);
+        int row = studentList.getSelectedRow();
+        int id = Integer.parseInt(d.getValueAt(row,0).toString());
+        DefaultTableModel f = (DefaultTableModel) courseBox.getModel();
+        f.setRowCount(0);
         //referenced code from Knowledge to Share's YouTube video;
         try {
             String state = "select student_id from enrollment where section_id=" + sid + ";";
