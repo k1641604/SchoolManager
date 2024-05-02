@@ -320,21 +320,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
 
             ACA.setBounds(400, 100, 100, 30);
             ACA.setBorder(oLine);
-            ACA.addActionListener(e -> {setACA();});
             bg.add(ACA);
             add(ACA);
             ACA.setVisible(false);
 
             KAP.setBounds(400, 130, 75, 30);
             KAP.setBorder(oLine);
-            KAP.addActionListener(e -> {setKAP();});
             bg.add(KAP);
             add(KAP);
             KAP.setVisible(false);
 
             AP.setBounds(400, 160, 75, 30);
             AP.setBorder(oLine);
-            AP.addActionListener(e -> {setAP();});
             bg.add(AP);
             add(AP);
             AP.setVisible(false);
@@ -432,13 +429,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         refreshTeacherSelection();
         refreshStudentSelection();
 
-        /*try {
-            readFile();
-        }
-        catch (Exception b){
-            b.printStackTrace();
-            System.out.println("Helo");
-        }*/
+
         setVisible(true);
     }
 
@@ -484,7 +475,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void teacherTable(){
         openTeacher();
         addToJTableDataTeachers();
-        System.out.println("aaaaaaaaaaaaaaaaaaaa");
         //setVisible(false);
         teachers.setVisible(true);
         teacherArea.setVisible(true);
@@ -497,20 +487,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addTeacher.setVisible(true);
         removeTeacher.setVisible(true);
         sectionsTaughtArea.setVisible(true);
-        /*try {File f = new File("TeacherInfo.txt");
-            Scanner fromFile = new Scanner(f);
-            String a = null;
-            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
-                if (parts.equals("")){break;}
-                Teacher t = new Teacher( );
-                info.add(t);
-                stuff.setListData(info.toArray());}
-            System.out.println("String is "+ a);}
-        catch (Exception b){b.printStackTrace();
-            System.out.println("Helo");}*/
 
         String[] columnNames = {"id", "First Name", "Last Name"};
-        //teachersList = new JTable(teacherData, columnNames);
     }
     public void openTeacher(){
         //all JTextFields should be reset if another menu is opened
@@ -557,9 +535,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void studentTable(){
         openStudent();
         addToJTableDataStudent();
-        System.out.println("bbbbbbbbbbbbbbbbbbbb");
-        //setVisible(false);
-        editStudent.setVisible(true);
         students.setVisible(true);
         schedule.setVisible(true);
         studentArea.setVisible(true);
@@ -612,29 +587,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         add2Sec.setVisible(false);
     }
 
-    public void studentAdder(){
-        if (studentFirstName.getText().isEmpty() || studentLastName.getText().isEmpty()){
-            int value = JOptionPane.showConfirmDialog(null, "Students require a First AND a Last name");
-        }
-        else{
-            System.out.println("Student "+studentFirstName.getText()+" "+studentLastName.getText()+" was added to the list");
-        }
-    }
-    public void studentRemover(){
-        //if (/*should check if the student that is being removed actually exists*/){
-        //    int value = JOptionPane.showConfirmDialog(null, "A student which exists in the system must be selected");
-        //}
-       // else {
-       //     System.out.println("Student "+studentFirstName.getText()+" "+studentLastName.getText()+" has been removed from the list");
-       // }
-    }
-    public void studentEditor(){}
 
     public void coursesTable(){
         openCourse();
-        //addToJTableDataCourses();
-        System.out.println("cccccccccccccccccccc");
-        //setVisible(false);
             cListName.setVisible(true);
             courseArea.setVisible(true);
             course.setVisible(true);
@@ -644,42 +599,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             AP.setVisible(true);
             addCourse.setVisible(true);
             removeCourse.setVisible(true);
-        //enrollmentPane.setVisible(true);
-                /*try {File f = new File("CourseInfo.txt");
-            Scanner fromFile = new Scanner(f);
-            String a = null;
-            while(fromFile.hasNextLine()){String[] parts = fromFile.nextLine().split(",");
-                if (parts.equals("")){break;}
-                Course c = new Course();
-                info.add(c);
-                stuff.setListData(info.toArray());}
-            System.out.println("String is "+ a);}
-        catch (Exception b){b.printStackTrace();
-            System.out.println("Helo");}*/
-        String[] columnNames = {"id", "Title", "Type"};
-        //courseList = new JTable(courseData, columnNames);
-        if (ACA.isSelected()){
-            rank = 0;
-            System.out.println("Course rank is Academic");
-        }
-        if (KAP.isSelected()){
-            rank = 1;
-            System.out.println("Course rank is KAP");
-        }
-        if (AP.isSelected()) {
-            rank = 2;
-            System.out.println("Course rank is AP");
-        }
 
-    }
-    public void setACA(){rank = 0;
-        System.out.println("Course rank is Academic");
-    }
-    public void setKAP(){rank = 1;
-        System.out.println("Course rank is KAP");
-    }
-    public void setAP(){rank = 2;
-        System.out.println("Course rank is AP");
     }
 
     public void openCourse(){
@@ -726,7 +646,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
 
     public void sectionsTable(){
-        System.out.println("dddddddddddddddddddd");
         sectionArea.setVisible(true);
         secInfo.setVisible(true);
         availableCourseLabel.setVisible(true);
@@ -824,10 +743,13 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             addToJTableDataStudent();
             addToJTableDataCourses();
             addToJTableDataSections();
+            addToJTableDataSchedule(-1);
+            addToJTableDataRoster(-1);
             refreshCourseSelection();
             refreshStudentSelection();
             refreshTeacherSelection();
-
+            repaint();
+            //this.dispose();
         }
         catch (Exception e)
         {
@@ -937,7 +859,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 String cou = String.valueOf(rsse.getInt("course_id"));
                 String teach = String.valueOf(rsse.getInt("teacher_id"));
                 String[] toAdd = {sec, cou, teach};
-                System.out.println(sec + " " + cou + " " + teach);
                 tableMod.addRow(toAdd);
                 repaint();
             }
@@ -947,69 +868,66 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void addToJTableDataRoster(int sid)
     {
-        System.out.println("sid: " + sid);
         ArrayList<Students> toAddStudent = new ArrayList<Students>();
         DefaultTableModel d = (DefaultTableModel) Roster.getModel();
         d.setRowCount(0);
         //referenced code from Knowledge to Share's YouTube video;
-        try {
-            String state = "select student_id from enrollment where section_id=" + sid + ";";
-            Statement jsc = this.con.createStatement();
-            ResultSet rsse = jsc.executeQuery(state);
-            while(rsse.next())
-            {
-                int teach = rsse.getInt("student_id");
-                System.out.println("student id: " + teach);
-                String[] toAdd = studentNameFromID(teach);
-                Students s = new Students(Integer.parseInt(toAdd[0]), toAdd[1], toAdd[2]);
-                toAddStudent.add(s);
-                //d.addRow(toAdd);
-                //repaint();
+        if(sid != -1)
+        {
+            try {
+                String state = "select student_id from enrollment where section_id=" + sid + ";";
+                Statement jsc = this.con.createStatement();
+                ResultSet rsse = jsc.executeQuery(state);
+                while(rsse.next())
+                {
+                    int teach = rsse.getInt("student_id");
+                    String[] toAdd = studentNameFromID(teach);
+                    Students s = new Students(Integer.parseInt(toAdd[0]), toAdd[1], toAdd[2]);
+                    toAddStudent.add(s);
+                    //d.addRow(toAdd);
+                    //repaint();
+                }
+                Collections.sort(toAddStudent);
+                for(Students stu : toAddStudent)
+                {
+                    String[] s = {stu.getLastName(), stu.getFirstName(),String.valueOf(stu.getStudentID())};
+                    d.addRow(s);
+                    repaint();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            Collections.sort(toAddStudent);
-            for(Students stu : toAddStudent)
-            {
-                String[] s = {stu.getLastName(), stu.getFirstName(),String.valueOf(stu.getStudentID())};
-                d.addRow(s);
-                repaint();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
     public void addToJTableDataSchedule(int sid)
     {
-        System.out.println("sid: " + sid);
-        ArrayList<Students> toAddStudent = new ArrayList<Students>();
-        DefaultTableModel d = (DefaultTableModel) studentList.getModel();
-        int row = studentList.getSelectedRow();
-        int id = Integer.parseInt(d.getValueAt(row,0).toString());
         DefaultTableModel f = (DefaultTableModel) courseBox.getModel();
         f.setRowCount(0);
         //referenced code from Knowledge to Share's YouTube video;
-        try {
-            String state = "select student_id from enrollment where section_id=" + sid + ";";
-            Statement jsc = this.con.createStatement();
-            ResultSet rsse = jsc.executeQuery(state);
-            while(rsse.next())
-            {
-                int teach = rsse.getInt("student_id");
-                System.out.println("student id: " + teach);
-                String[] toAdd = studentNameFromID(teach);
-                Students s = new Students(Integer.parseInt(toAdd[0]), toAdd[1], toAdd[2]);
-                toAddStudent.add(s);
-                //d.addRow(toAdd);
-                //repaint();
+        if(sid != -1)
+        {
+            try {
+                String state = "select section_id from enrollment where student_id=" + sid + ";";
+                Statement jsc = this.con.createStatement();
+                ResultSet rsse = jsc.executeQuery(state);
+                ArrayList<Integer> section = new ArrayList<Integer>();
+                while(rsse.next())
+                {
+                    Integer teach = rsse.getInt("section_id");
+                    section.add(teach);
+                }
+                for(Integer stuSec : section)
+                {
+                    int[] tc = teacherAndCourseIDFromSection((int)stuSec);
+                    String[] teacherNames = teacherNameFromID(tc[0]);
+                    String cn = courseNameFromID(tc[1]);
+                    String[] toAdd = {String.valueOf(sid), cn, String.valueOf(tc[0]), teacherNames[0], teacherNames[1]};
+                    f.addRow(toAdd);
+                    repaint();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            Collections.sort(toAddStudent);
-            for(Students stu : toAddStudent)
-            {
-                String[] s = {stu.getLastName(), stu.getFirstName(),String.valueOf(stu.getStudentID())};
-                d.addRow(s);
-                repaint();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
     public void addToSqlTeacher(Teachers t, boolean fromFile)
@@ -1179,9 +1097,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 c = new Enrollment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
                 enrollmentInfo.add(c);
                 addToSqlEnrollment(c);
-                System.out.println("section id: " + c.getSectionID() + " student id: " + c.getStudentID());
             }
             from.close();
+            refreshCourseSelection();
+            refreshStudentSelection();
+            refreshTeacherSelection();
         }
         catch (Exception e)
         {
@@ -1385,11 +1305,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     }
     public void addSectionButton()
         {
-            System.out.println("adding");
             Courses c = (Courses) available.getSelectedItem();
-            System.out.println(c + "this is course");
             Teachers t = (Teachers) teacherbox.getSelectedItem();
-            System.out.println(t+ "this is teacher");
             Sections s = new Sections(c.getCourseID(), t.getTeacherID());
             sectionInfo.add(s);
             addToSqlSection(s, false);
@@ -1599,6 +1516,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             int row = studentList.getSelectedRow();
             studentFirstName.setText(tbModel.getValueAt(row,1).toString());
             studentLastName.setText(tbModel.getValueAt(row,2).toString());
+            int sid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
+            addToJTableDataSchedule(sid);
         }
     }
     public void updateSelectionCourse()
@@ -1637,7 +1556,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         if(sectionList.getSelectedRowCount() == 1 )
         {
             int row = sectionList.getSelectedRow();
-            System.out.println(row);
             int sid = Integer.parseInt(tbModel.getValueAt(row,0).toString());
             int cid = Integer.parseInt(tbModel.getValueAt(row,1).toString());
             int tid = Integer.parseInt(tbModel.getValueAt(row,2).toString());
@@ -1679,11 +1597,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 int cl = -1;
                 for(int i = 0; i < availableList.size(); i++)
                 {
-                    System.out.println(availableList.get(i) + " " + c);
                     if(availableList.get(i).compareTo(c) == 0)
                     {
                         cl = i;
-                        System.out.println(cl);
                         available.setSelectedIndex(cl);
                     }
                 }
@@ -1749,6 +1665,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addToJTableDataStudent();
         studentFirstName.setText("");
         studentLastName.setText("");
+        editStudent.setVisible(true);
     }
     public void editSelectionCourse()
     {
@@ -1789,6 +1706,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addToJTableDataCourses();
         courseName.setText("");
         bg.clearSelection();
+        editCourse.setVisible(false);
+        addCourse.setVisible(true);
     }
     public void editSelectionSection()
     {
@@ -1796,9 +1715,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         int row = sectionList.getSelectedRow();
         int id = Integer.parseInt(tbmd.getValueAt(row,0).toString());
         Courses c = (Courses) available.getSelectedItem();
-        System.out.println(c);
         Teachers t = (Teachers) teacherbox.getSelectedItem();
-        System.out.println(t);
         Sections ta = new Sections(c.getCourseID(), t.getTeacherID());
         try {
             Connection con= DriverManager.getConnection(
@@ -1838,6 +1755,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Courses cs = new Courses(id, title, t);
                 available.addItem(cs);
                 availableList.add(cs);
+                System.out.println(cs);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1893,27 +1811,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
 
     }
-    public String courseNameFromID(int cid)
-    {
-        String name = "";
-        try
-        {
-            String state = "select course_name from course where course_id=" + cid + ";";
-            Connection contc= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            Statement jctc = contc.createStatement();
-            ResultSet rsctc = jctc.executeQuery(state);
-            while(rsctc.next())
-            {
-                name = rsctc.getString("course_name");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return name;
-    }
     public String[] studentNameFromID(int sid)
     {
         String[] sntr;
@@ -1947,6 +1844,75 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         Enrollment e = new Enrollment(secid, stuid);
         addToSqlEnrollment(e);
         addToJTableDataRoster(secid);
+    }
+    public String[] teacherNameFromID(int tid)
+    {
+        String[] tntr;
+        try
+        {
+            Statement s = this.con.createStatement();
+            String state = "select * from teacher WHERE teacher_id=" + tid +";";
+            ResultSet sn = s.executeQuery(state);
+            if(sn.isBeforeFirst())
+            {
+                while(sn.next())
+                {
+                    tntr = new String[]{sn.getString("first_name"), sn.getString("last_name")};
+                    return tntr;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String courseNameFromID(int tid)
+    {
+        String tntr;
+        try
+        {
+            Statement s = this.con.createStatement();
+            String state = "select * from course WHERE course_id=" + tid +";";
+            ResultSet sn = s.executeQuery(state);
+            if(sn.isBeforeFirst())
+            {
+                while(sn.next())
+                {
+                    tntr = sn.getString("course_name");
+                    return tntr;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int[] teacherAndCourseIDFromSection(int sid)
+    {
+        int[] tntr;
+        try
+        {
+            Statement s = this.con.createStatement();
+            String state = "select * from section WHERE section_id=" + sid +";";
+            ResultSet sn = s.executeQuery(state);
+            if(sn.isBeforeFirst())
+            {
+                while(sn.next())
+                {
+                    tntr = new int[]{Integer.parseInt(sn.getString("teacher_id")), Integer.parseInt(sn.getString("course_id"))};
+                    return tntr;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
