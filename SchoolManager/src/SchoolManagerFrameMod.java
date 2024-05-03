@@ -475,6 +475,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     public void teacherTable(){
         openTeacher();
         addToJTableDataTeachers();
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
         //setVisible(false);
         teachers.setVisible(true);
         teacherArea.setVisible(true);
@@ -546,6 +548,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addStudent.setVisible(true);
         removeStudent.setVisible(true);
         courseBoxArea.setVisible(true);
+
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
         String[] columnNames = {"id", "First Name", "Last Name"};
         //studentList = new JTable(studentData, columnNames);
     }
@@ -640,6 +645,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         courseBoxArea.setVisible(false);
         remFmSec.setVisible(false);
         add2Sec.setVisible(false);
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
     }
     public void courseEditor(){
 
@@ -654,6 +661,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addSection.setVisible(true);
         //editSection.setVisible(true);
         removeSection.setVisible(true);
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
         refreshCourseSelection();
         refreshTeacherSelection();
         refreshStudentSelection();
@@ -921,7 +930,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                     int[] tc = teacherAndCourseIDFromSection((int)stuSec);
                     String[] teacherNames = teacherNameFromID(tc[0]);
                     String cn = courseNameFromID(tc[1]);
-                    String[] toAdd = {String.valueOf(sid), cn, String.valueOf(tc[0]), teacherNames[0], teacherNames[1]};
+                    String[] toAdd = {String.valueOf(stuSec), cn, String.valueOf(tc[0]), teacherNames[0], teacherNames[1]};
                     f.addRow(toAdd);
                     repaint();
                 }
@@ -1477,6 +1486,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addTeacher.setVisible(false);
         editTeacher.setVisible(true);
         DefaultTableModel tbModel = (DefaultTableModel)  teachersList.getModel();
+        DefaultTableModel d = (DefaultTableModel) sectionsTaughtList.getModel();
+        d.setRowCount(0);
         if(teachersList.getSelectedRowCount() == 1 )
         {
             int row = teachersList.getSelectedRow();
@@ -1489,8 +1500,6 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                         "jdbc:mysql://localhost:3306/schoolmanager","root","password");
                 Statement rtu = rtcu.createStatement();
                 ResultSet rs = rtu.executeQuery("SELECT section_id,course_id FROM section WHERE teacher_id=" + id +";");
-                DefaultTableModel d = (DefaultTableModel) sectionsTaughtList.getModel();
-                d.setRowCount(0);
                 while(rs.next())
                 {
                     String sid = String.valueOf(rs.getInt("section_id"));
@@ -1638,6 +1647,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addToJTableDataTeachers();
         teacherFirstName.setText("");
         teacherLastName.setText("");
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
     }
     public void editSelectionStudent()
     {
@@ -1666,6 +1677,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         studentFirstName.setText("");
         studentLastName.setText("");
         editStudent.setVisible(true);
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
     }
     public void editSelectionCourse()
     {
@@ -1708,6 +1721,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         bg.clearSelection();
         editCourse.setVisible(false);
         addCourse.setVisible(true);
+
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
     }
     public void editSelectionSection()
     {
@@ -1736,6 +1752,10 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         remFmSec.setVisible(false);
         rosterArea.setVisible(false);
         studentBox.setVisible(false);
+        addToJTableDataRoster(-1);
+        addToJTableDataSchedule(-1);
+        updateSelectionTeacher();
+        editTeacher.setVisible(false);
     }
     public void refreshCourseSelection()
     {
