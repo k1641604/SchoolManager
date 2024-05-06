@@ -1111,6 +1111,9 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             refreshCourseSelection();
             refreshStudentSelection();
             refreshTeacherSelection();
+            removeCourse.setVisible(false);
+            editCourse.setVisible(false);
+            editTeacher.setVisible(false);
         }
         catch (Exception e)
         {
@@ -1415,6 +1418,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         }
         studentFirstName.setText("");
         studentLastName.setText("");
+        DefaultTableModel d = (DefaultTableModel) courseBox.getModel();
+        d.setRowCount(0);
     }
     public void removeItemCourse()
     {
