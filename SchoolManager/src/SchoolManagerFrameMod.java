@@ -406,7 +406,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             n.execute(s);
             s = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(student_id));";
             n.execute(s);
-            s = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, course_name Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
+            s = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, title Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
             n.execute(s);
             s = "CREATE TABLE IF NOT EXISTS section (section_id INTEGER Not Null AUTO_INCREMENT, course_id INTEGER Not Null,  teacher_id INTEGER Not Null, PRIMARY KEY(section_id), FOREIGN KEY(course_id) references course(course_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(teacher_id) references teacher(teacher_id) ON DELETE CASCADE ON UPDATE CASCADE);";
             n.execute(s);
@@ -740,7 +740,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             np.execute(sp);
             sp = "CREATE TABLE IF NOT EXISTS student (student_id INTEGER Not Null AUTO_INCREMENT, first_name Text, last_name Text, PRIMARY KEY(student_id));";
             np.execute(sp);
-            sp = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, course_name Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
+            sp = "CREATE TABLE IF NOT EXISTS course (course_id INTEGER Not Null AUTO_INCREMENT, title Text Not Null, type INTEGER Not Null, PRIMARY KEY(course_id));";
             np.execute(sp);
             sp = "CREATE TABLE IF NOT EXISTS section (section_id INTEGER Not Null AUTO_INCREMENT, course_id INTEGER Not Null,  teacher_id INTEGER Not Null, PRIMARY KEY(section_id), FOREIGN KEY(course_id) references course(course_id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(teacher_id) references teacher(teacher_id) ON DELETE CASCADE ON UPDATE CASCADE);";
             np.execute(sp);
@@ -830,7 +830,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             while(rsc.next())
             {
                 String id = String.valueOf(rsc.getInt("course_id"));
-                String title = rsc.getString("course_name");
+                String title = rsc.getString("title");
                 int t = rsc.getInt("type");
                 String type;
                 if(t == 0)
@@ -988,11 +988,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             String state;
             if(!fromFile)
             {
-                state  = "INSERT INTO course (course_name, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
+                state  = "INSERT INTO course (title, type) VALUES ('" + c.getTitle() +"', " + c.getType() + ");";
             }
             else
             {
-                state = "INSERT INTO course (course_id, course_name, type) VALUES (" + c.getCourseID() + ", '"+ c.getTitle() + "', " + c.getType() + ");";
+                state = "INSERT INTO course (course_id, title, type) VALUES (" + c.getCourseID() + ", '"+ c.getTitle() + "', " + c.getType() + ");";
             }
             Statement co = con.createStatement();
             boolean value = co.execute(state);
@@ -1189,7 +1189,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 while(rs.next())
                 {
                     String id = String.valueOf(rs.getInt("course_id"));
-                    String title = rs.getString("course_name");
+                    String title = rs.getString("title");
                     String t = String.valueOf(rs.getInt("type"));
                     printWriter.println(id + "," + title + "," + t);
                 }
@@ -1594,12 +1594,12 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
                 Connection rtcus = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/schoolmanager","root","password");
                 Statement rtus = rtcus.createStatement();
-                ResultSet rss = rtus.executeQuery("SELECT course_name,type FROM course WHERE course_id=" + cid +";");
+                ResultSet rss = rtus.executeQuery("SELECT title,type FROM course WHERE course_id=" + cid +";");
 
 
                 while(rss.next())
                 {
-                    sec = rss.getString("course_name");
+                    sec = rss.getString("title");
                     stun = rss.getInt("type");
                 }
                 c = new Courses(cid,sec,stun);
@@ -1707,7 +1707,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         try {
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/schoolmanager","root","password");
-            String state = "UPDATE course SET course_name='" +courseName.getText()+"' WHERE course_id=" + id + ";";
+            String state = "UPDATE course SET title='" +courseName.getText()+"' WHERE course_id=" + id + ";";
             Statement te = con.createStatement();
             boolean value = te.execute(state);
             state = "UPDATE course SET type=" +type+" WHERE course_id=" + id + ";";
@@ -1770,7 +1770,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             while(rscs.next())
             {
                 int id = rscs.getInt("course_id");
-                String title = rscs.getString("course_name");
+                String title = rscs.getString("title");
                 int t = rscs.getInt("type");
                 Courses cs = new Courses(id, title, t);
                 available.addItem(cs);
@@ -1900,7 +1900,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {
                 while(sn.next())
                 {
-                    tntr = sn.getString("course_name");
+                    tntr = sn.getString("title");
                     return tntr;
                 }
             }
