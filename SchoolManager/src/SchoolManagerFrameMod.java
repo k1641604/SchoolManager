@@ -29,10 +29,18 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JMenu Help = new JMenu("Help");
     JMenu File = new JMenu("File");
         JLabel teachers = new JLabel("Teacher Information");
-        JTable teachersList = new JTable(tableModelTeacher);
+        JTable teachersList = new JTable(tableModelTeacher){public boolean isCellEditable(int row, int column) {
+            return false;
+        };public boolean editCellAt(int row, int column) {
+            return false;
+        };};
         JScrollPane teacherArea;
 
-    JTable Roster = new JTable(tableModelRoster);
+    JTable Roster = new JTable(tableModelRoster){public boolean isCellEditable(int row, int column) {
+        return false;
+    };public boolean editCellAt(int row, int column) {
+        return false;
+    };};
     JScrollPane rosterArea;
 
         JLabel tFirst = new JLabel("First Name");
@@ -40,20 +48,36 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         JLabel tLast = new JLabel("Last Name");
         JTextField teacherLastName = new JTextField();
     JLabel cListName = new JLabel("Course List");
-    JTable courseList = new JTable(tableModelCourse);
+    JTable courseList = new JTable(tableModelCourse){public boolean isCellEditable(int row, int column) {
+        return false;
+    };   public boolean editCellAt(int row, int column) {
+        return false;
+    };};
     JScrollPane courseArea;
     JLabel course = new JLabel("Course Name");
     JTextField courseName = new JTextField("");
-        JTable sectionList = new JTable(tableModelSection);
+        JTable sectionList = new JTable(tableModelSection){public boolean isCellEditable(int row, int column) {
+            return false;
+        };public boolean editCellAt(int row, int column) {
+            return false;
+        };};
         JScrollPane sectionArea;
         JLabel secTab = new JLabel("Sections Taught");
-        JTable sectionsTaughtList = new JTable(tableModelTaught);
+        JTable sectionsTaughtList = new JTable(tableModelTaught){public boolean isCellEditable(int row, int column) {
+            return false;
+        };public boolean editCellAt(int row, int column) {
+            return false;
+        };};
         JScrollPane sectionsTaughtArea = new JScrollPane();
     JTable enrollmentList;
     JScrollPane enrollmentPane = new JScrollPane();
         JLabel students = new JLabel("Student Information");
         JLabel schedule = new JLabel("Student Schedule");
-        JTable studentList = new JTable(tableModelStudent);
+        JTable studentList = new JTable(tableModelStudent){public boolean isCellEditable(int row, int column) {
+            return false;
+        };public boolean editCellAt(int row, int column) {
+            return false;
+        };};
         JScrollPane studentArea;
         JLabel sFirst = new JLabel("First Name");
         JLabel sLast = new JLabel("Last Name");
@@ -87,7 +111,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
     JButton editTeacher  = new JButton("Save Changes to Teacher's Information");
     JButton removeSection = new JButton("Remove Section from List");
     JButton editSection  = new JButton("Save Changes to Section Information");
-    JTable courseBox = new JTable(tableModelSchedule);
+    JTable courseBox = new JTable(tableModelSchedule){public boolean isCellEditable(int row, int column) {
+        return false;
+    };public boolean editCellAt(int row, int column) {
+        return false;
+    };};
     JScrollPane courseBoxArea;
     JLabel secInfo = new JLabel("Section Information");
     JLabel availableCourseLabel = new JLabel("Available courses and teachers");
@@ -297,7 +325,8 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             {return ;}});
         sectionList.getSelectionModel().addListSelectionListener(e ->{
             if(!e.getValueIsAdjusting())
-            {updateSelectionSection();}
+            {
+                refreshTeacherSelection(); updateSelectionSection();}
             else
             {return ;}});
         courseArea = new JScrollPane(courseList);
@@ -604,6 +633,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
             AP.setVisible(true);
             addCourse.setVisible(true);
             removeCourse.setVisible(true);
+            addToJTableDataCourses();
 
     }
 
@@ -661,6 +691,7 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         addSection.setVisible(true);
         //editSection.setVisible(true);
         removeSection.setVisible(true);
+        addToJTableDataSections();
         addToJTableDataRoster(-1);
         addToJTableDataSchedule(-1);
         refreshCourseSelection();
