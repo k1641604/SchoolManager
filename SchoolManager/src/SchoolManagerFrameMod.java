@@ -1685,6 +1685,11 @@ public class SchoolManagerFrameMod extends JFrame implements WindowListener {
         teacherLastName.setText("");
         addToJTableDataRoster(-1);
         addToJTableDataSchedule(-1);
+        add2Sec.setVisible(false);
+        remFmSec.setVisible(false);
+        studentBox.setVisible(false);
+        editSection.setVisible(false);
+        rosterArea.setVisible(false);
     }
     public void editSelectionStudent()
     {
