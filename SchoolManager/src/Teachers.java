@@ -44,7 +44,14 @@ public class Teachers implements Comparable<Teachers>{
     @Override
     public String toString()
     {
-        return "FN:" + this.firstName + " LN:" + this.lastName + " Teacher ID: " + this.teacherID;
+        if(this.teacherID == -1)
+        {
+            return this.lastName + " " + this.firstName;
+        }
+        else
+        {
+            return "FN:" + this.firstName + " LN:" + this.lastName + " Teacher ID: " + this.teacherID;
+        }
     }
     @Override
     public int compareTo(Teachers t) {
